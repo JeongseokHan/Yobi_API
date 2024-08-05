@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.example.yobiapi.board.Entity.Board;
 import org.example.yobiapi.comments.dto.BoardCommentsDTO;
 import org.example.yobiapi.comments.dto.RecipeCommentsDTO;
+import org.example.yobiapi.contenttypes.Entity.ContentTypes;
 import org.example.yobiapi.recipe.Entity.Recipe;
 import org.example.yobiapi.user.Entity.User;
 import org.hibernate.annotations.ColumnDefault;
@@ -39,11 +40,12 @@ public class Comments {
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "content_id", referencedColumnName = "content_id")
+    private ContentTypes contentTypes;
+
     @Column(nullable = false, name = "content")
     private String content;
-
-    @Column(name = "content_id")
-    private Integer contentId;
 
     @CreationTimestamp
     @Column(name = "create_content")
@@ -65,7 +67,7 @@ public class Comments {
         comments.recipe.setRecipeId(recipeCommentsDTO.getRecipeId());
         comments.setContent(recipeCommentsDTO.getContent());
         comments.user.setUserId(recipeCommentsDTO.getUserId());
-
+        comments.contentTypes.setContentId(recipeCommentsDTO.getContentId());
         return comments;
     }
 
@@ -74,6 +76,7 @@ public class Comments {
         comments.board.setBoardId(boardCommentsDTO.getBoardId());
         comments.user.setUserId(boardCommentsDTO.getUserId());
         comments.setContent(boardCommentsDTO.getContent());
+        comments.contentTypes.setContentId(boardCommentsDTO.getContentId());
 
         return comments;
     }
