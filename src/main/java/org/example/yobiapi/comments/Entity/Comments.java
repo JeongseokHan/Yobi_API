@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.yobiapi.board.Entity.Board;
+import org.example.yobiapi.comments.dto.BoardCommentsDTO;
+import org.example.yobiapi.comments.dto.RecipeCommentsDTO;
 import org.example.yobiapi.recipe.Entity.Recipe;
 import org.example.yobiapi.user.Entity.User;
 import org.hibernate.annotations.ColumnDefault;
@@ -27,11 +29,11 @@ public class Comments {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id", referencedColumnName = "board_id")
-    private Board boardId;
+    private Board board;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id", referencedColumnName = "recipe_id")
-    private Recipe recipeId;
+    private Recipe recipe;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
@@ -58,5 +60,21 @@ public class Comments {
     @Column(name = "parent_comment_id")
     private Integer parentCommentId;
 
-    //public static Comments toComments()
+    public static Comments RecipeComments(RecipeCommentsDTO recipeCommentsDTO) {
+        Comments comments = new Comments();
+        comments.recipe.setRecipeId(recipeCommentsDTO.getRecipeId());
+        comments.setContent(recipeCommentsDTO.getContent());
+        comments.user.setUserId(recipeCommentsDTO.getUserId());
+
+        return comments;
+    }
+
+    public static Comments BoardComments(BoardCommentsDTO boardCommentsDTO) {
+        Comments comments = new Comments();
+        comments.board.setBoardId(boardCommentsDTO.getBoardId());
+        comments.user.setUserId(boardCommentsDTO.getUserId());
+        comments.setContent(boardCommentsDTO.getContent());
+
+        return comments;
+    }
 }
