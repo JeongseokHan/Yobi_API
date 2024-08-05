@@ -7,5 +7,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentsDTO {
+public class BoardCommentsDTO {
+    private Integer boardId;
+    private String userId;
+    private String content;
+    private Integer contentId;
 }
