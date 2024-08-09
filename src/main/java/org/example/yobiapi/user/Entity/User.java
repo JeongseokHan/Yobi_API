@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @Table(name = "user")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, name = "user_id")
     private String userId;
 
@@ -51,7 +50,7 @@ public class User {
     public static User toUser(UserDTO userDTO) {
         User user = new User();
         user.setUserId(userDTO.getUserId());
-        user.setPassWord(user.getPassWord());
+        user.setPassWord(userDTO.getPassWord());
         user.setNickName(userDTO.getNickName());
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
