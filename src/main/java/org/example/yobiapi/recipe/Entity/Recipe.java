@@ -15,8 +15,6 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "recipe")
 public class Recipe {
     @Id
@@ -24,7 +22,7 @@ public class Recipe {
     @Column(nullable = false, name = "recipe_id")
     private Integer recipeId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id", referencedColumnName = "user_id")
     private User user;
 
@@ -53,12 +51,12 @@ public class Recipe {
     @Column(name = "update_date")
     private LocalDateTime updateDate;
 
-    public static Recipe toRecipe(RecipeDTO recipeDTO) {
+    public static Recipe toRecipe(RecipeDTO recipeDTO, User user) {
         Recipe recipe = new Recipe();
+        recipe.setUser(user);
         recipe.setCategory(recipeDTO.getCategory());
         recipe.setIngredient(recipeDTO.getIngredient());
         recipe.setTitle(recipeDTO.getTitle());
-        recipe.user.setUserId(recipeDTO.getUserId());
 
         return recipe;
     }
