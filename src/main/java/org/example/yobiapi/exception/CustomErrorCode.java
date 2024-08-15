@@ -23,7 +23,8 @@ public enum CustomErrorCode {
     Title_IS_EMPTY(HttpStatus.BAD_REQUEST, "ACCOUNT-014", "제목을 입력해주세요."),
     Title_LONG_REQUEST(HttpStatus.BAD_REQUEST, "ACCOUNT-015", "제목은 45자 이내로 작성해주세요."),
     AUTHOR_NOT_EQUAL(HttpStatus.BAD_REQUEST, "ACCOUNT-016", "작성자가 일치하지 않습니다."),
-    Recipe_NOT_FOUND(HttpStatus.BAD_REQUEST, "ACCOUNT-017", "레시피를 찾을 수 없습니다.");
+    Recipe_NOT_FOUND(HttpStatus.BAD_REQUEST, "ACCOUNT-017", "레시피를 찾을 수 없습니다."),
+    Content_Is_Empty(HttpStatus.BAD_REQUEST, "ACCOUNT-018", "내용을 적어주세요");
 
 
     private final HttpStatus httpStatus;	// HttpStatus

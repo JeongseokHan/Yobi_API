@@ -51,12 +51,12 @@ public class Board {
     private Integer reportCount;
 
     @Builder
-    public static Board toBoard(BoardDTO boardDTO) {
+    public static Board toBoard(BoardDTO boardDTO, User user) {
         Board board = new Board();
         board.setTitle(boardDTO.getTitle());
         board.setCategory(board.getCategory());
         board.setContent(board.getContent());
-        board.user.setUserId(boardDTO.getUserId());
+        board.setUser(user);
 
         return board;
     }
