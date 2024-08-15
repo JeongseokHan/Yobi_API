@@ -49,4 +49,9 @@ public class RecipeController {
     public ResponseEntity<?> getRecipeByTitle(@PathVariable("title") String title) {
         return ResponseEntity.status(200).body(recipeService.SearchRecipe_Title(title));
     }
+
+    @GetMapping(value = "/recipe/user/{user}")
+    public ResponseEntity<?> getRecipeByUser(@PathVariable("user") String user) {
+        return ResponseEntity.status(200).body(recipeService.SearchRecipe_User(user));
+    }
 }

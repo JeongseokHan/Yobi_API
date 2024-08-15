@@ -145,6 +145,22 @@ public class RecipeService {
         }
     }
 
+    public List<Recipe> SearchRecipe_User(String userId) {
+        User user = userRepository.findByUserId(userId);
+        if(user == null) {
+            throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
+        }
+        else {
+            List<Recipe> recipes = recipeRepository.findAllByUserId(userId);
+            if(recipes.isEmpty()) {
+                throw new CustomException(CustomErrorCode.Recipe_NOT_FOUND);
+            }
+            else {
+                return recipes;
+            }
+        }
+    }
+
     public HttpStatus fetchDataAndPrint() {
         try {
             String apiURL = "http://openapi.foodsafetykorea.go.kr/api/" +
