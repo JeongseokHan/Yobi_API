@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.yobiapi.exception.CustomErrorCode;
 import org.example.yobiapi.exception.CustomException;
 import org.example.yobiapi.recipe.Entity.Recipe;
+import org.example.yobiapi.recipe.Entity.RecipeProjection;
 import org.example.yobiapi.recipe.Entity.RecipeRepository;
 import org.example.yobiapi.recipe.dto.DeleteRecipeDTO;
 import org.example.yobiapi.recipe.dto.RecipeDTO;
@@ -125,8 +126,8 @@ public class RecipeService {
         return recipeRepository.findAll();
     }
 
-    public List<Recipe> SearchRecipe_Title(String Title) {
-        List<Recipe> recipes = recipeRepository.findAllByTitleContaining(Title);
+    public List<RecipeProjection> SearchRecipe_Title(String Title) {
+        List<RecipeProjection> recipes = recipeRepository.findAllByTitleContaining(Title);
         if(recipes.isEmpty()) {
             throw new CustomException(CustomErrorCode.Recipe_NOT_FOUND);
         }
@@ -135,8 +136,8 @@ public class RecipeService {
         }
     }
 
-    public List<Recipe> SearchRecipe_Category(String Category) {
-        List<Recipe> recipes = recipeRepository.findAllByCategoryContaining(Category);
+    public List<RecipeProjection> SearchRecipe_Category(String Category) {
+        List<RecipeProjection> recipes = recipeRepository.findAllByCategoryContaining(Category);
         if(recipes.isEmpty()) {
             throw new CustomException(CustomErrorCode.Recipe_NOT_FOUND);
         }
@@ -145,13 +146,13 @@ public class RecipeService {
         }
     }
 
-    public List<Recipe> SearchRecipe_User(String userId) {
+    public List<RecipeProjection> SearchRecipe_User(String userId) {
         User user = userRepository.findByUserId(userId);
         if(user == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
         else {
-            List<Recipe> recipes = recipeRepository.findAllByUserId(userId);
+            List<RecipeProjection> recipes = recipeRepository.findAllByUser(user);
             if(recipes.isEmpty()) {
                 throw new CustomException(CustomErrorCode.Recipe_NOT_FOUND);
             }
