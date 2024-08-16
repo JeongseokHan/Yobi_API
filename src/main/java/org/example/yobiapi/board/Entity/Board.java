@@ -21,7 +21,7 @@ public class Board {
     @Column(nullable = false, name = "board_id")
     private Integer boardId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id", referencedColumnName = "user_id")
     private User user;
 
@@ -54,8 +54,8 @@ public class Board {
     public static Board toBoard(BoardDTO boardDTO, User user) {
         Board board = new Board();
         board.setTitle(boardDTO.getTitle());
-        board.setCategory(board.getCategory());
-        board.setContent(board.getContent());
+        board.setCategory(boardDTO.getCategory());
+        board.setContent(boardDTO.getContent());
         board.setUser(user);
 
         return board;
