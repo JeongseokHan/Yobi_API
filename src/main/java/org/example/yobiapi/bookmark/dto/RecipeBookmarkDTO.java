@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RecipeBookmarkDTO {
     private Integer recipeId;
+    private String userId;
 }
