@@ -5,10 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.yobiapi.board.Entity.Board;
-import org.example.yobiapi.bookmark.dto.BoardBookmarkDTO;
 import org.example.yobiapi.bookmark.dto.RecipeBookmarkDTO;
 import org.example.yobiapi.recipe.Entity.Recipe;
+import org.example.yobiapi.user.Entity.User;
 
 @Entity
 @Getter
@@ -22,25 +21,18 @@ public class Bookmark {
     @Column(nullable = false, name = "bookmark_id")
     private Integer bookmarkId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id", referencedColumnName = "board_id")
-    private Board board;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "recipe_id", referencedColumnName = "recipe_id")
     private Recipe recipe;
 
-    public static Bookmark RecipeBookmark(RecipeBookmarkDTO recipeBookmarkDTO) {
+    public static Bookmark RecipeBookmark(Recipe recipe, User user) {
         Bookmark bookmark = new Bookmark();
-        bookmark.recipe.setRecipeId(recipeBookmarkDTO.getRecipeId());
-
-        return bookmark;
-    }
-
-    public static Bookmark BoardBookmark(BoardBookmarkDTO boardBookmarkDTO) {
-        Bookmark bookmark = new Bookmark();
-        bookmark.board.setBoardId(boardBookmarkDTO.getBoardId());
-
+        bookmark.setRecipe(recipe);
+        bookmark.setUser(user);
         return bookmark;
     }
 }
