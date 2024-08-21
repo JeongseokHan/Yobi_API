@@ -1,4 +1,4 @@
-package org.example.yobiapi.likes;
+package org.example.yobiapi.likes.Entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.yobiapi.board.Entity.Board;
+import org.example.yobiapi.recipe.Entity.Recipe;
 import org.example.yobiapi.user.Entity.User;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -28,18 +29,28 @@ public class Likes {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name = "board_id", referencedColumnName = "board_id")
+    @JoinColumn(name = "board_id", referencedColumnName = "board_id")
     private Board board;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "recipe_id", referencedColumnName = "recipe_id")
+    private Recipe recipe;
 
     @CreationTimestamp
     @Column(nullable = false, name = "like_date")
     private LocalDateTime likeDate;
 
-    public static Likes toLikes(LikesDTO likesDTO) {
+    public static Likes toLikesBoard(User user, Board board) {
         Likes likes = new Likes();
-        likes.user.setUserId(likesDTO.getUserId());
-        likes.board.setBoardId(likesDTO.getBoardId());
+        likes.setBoard(board);
+        likes.setUser(user);
+        return likes;
+    }
 
+    public static Likes toLikesRecipe(User user, Recipe recipe) {
+        Likes likes = new Likes();
+        likes.setRecipe(recipe);
+        likes.setUser(user);
         return likes;
     }
 }
