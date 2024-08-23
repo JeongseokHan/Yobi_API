@@ -50,6 +50,9 @@ public class Board {
     @Column(name = "report_count")
     private Integer reportCount;
 
+    @Column(name = "board_thumbnail")
+    private String thumbnail;
+
     @Builder
     public static Board toBoard(BoardDTO boardDTO, User user) {
         Board board = new Board();
@@ -57,6 +60,7 @@ public class Board {
         board.setCategory(boardDTO.getCategory());
         board.setContent(boardDTO.getContent());
         board.setUser(user);
+        board.setThumbnail(boardDTO.getThumbnail());
 
         return board;
     }

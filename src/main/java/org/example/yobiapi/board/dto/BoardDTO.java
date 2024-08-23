@@ -12,4 +12,5 @@ public class BoardDTO {
     private String content;
     private String category;
     private String userId;
+    private String thumbnail;
 }
