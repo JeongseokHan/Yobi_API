@@ -44,6 +44,9 @@ public class User {
     @Column(name = "following_count")
     private Integer followingCount;
 
+    @Column(name = "user_profile")
+    private String userProfile;
+
     @Builder
     public static User toUser(UserDTO userDTO) {
         User user = new User();
@@ -53,7 +56,6 @@ public class User {
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
         user.setPhoneNumber(userDTO.getPhoneNumber());
-
         return user;
     }
 
