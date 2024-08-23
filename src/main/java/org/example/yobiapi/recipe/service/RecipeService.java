@@ -195,6 +195,7 @@ public class RecipeService {
                         && !rcpPartsDtls.contains("[")) {
                     defRecipe.setTitle(recipe.get("RCP_NM").toString());
                     defRecipe.setIngredient(ingredients);  // 추출된 재료 목록만 설정
+                    defRecipe.setRecipeThumbnail(recipe.get("ATT_FILE_NO_MAIN").toString());
                     defRecipe.setCategory("요비");
                     defRecipe.setUser(user);
                     recipeList.add(defRecipe);

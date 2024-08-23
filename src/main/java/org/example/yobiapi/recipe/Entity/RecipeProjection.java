@@ -14,4 +14,5 @@ public interface RecipeProjection {
     Integer getReportCount();
     LocalDateTime getCreateDate();
     LocalDateTime getUpdateDate();
+    String getRecipeThumbnail();
 }
