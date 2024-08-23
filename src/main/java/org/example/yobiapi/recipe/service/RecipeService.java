@@ -101,6 +101,7 @@ public class RecipeService {
                     updatedRecipe.setTitle(updateRecipeDTO.getTitle());
                     updatedRecipe.setIngredient(updateRecipeDTO.getIngredient());
                     updatedRecipe.setUpdateDate(LocalDateTime.now());
+                    updatedRecipe.setRecipeThumbnail(updateRecipeDTO.getRecipeThumbnail());
                     recipeRepository.save(updatedRecipe);
                     return HttpStatus.OK;
                 }
