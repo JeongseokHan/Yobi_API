@@ -51,13 +51,16 @@ public class Recipe {
     @Column(name = "update_date")
     private LocalDateTime updateDate;
 
+    @Column(name = "recipe_thumbnail")
+    private String recipeThumbnail;
+
     public static Recipe toRecipe(RecipeDTO recipeDTO, User user) {
         Recipe recipe = new Recipe();
         recipe.setUser(user);
         recipe.setCategory(recipeDTO.getCategory());
         recipe.setIngredient(recipeDTO.getIngredient());
         recipe.setTitle(recipeDTO.getTitle());
-
+        recipe.setRecipeThumbnail(recipeDTO.getRecipeThumbnail());
         return recipe;
     }
 }
