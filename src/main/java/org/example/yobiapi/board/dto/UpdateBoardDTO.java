@@ -12,5 +12,5 @@ public class UpdateBoardDTO {
     private String title;
     private String content;
     private String category;
-    private String thumbnail;
+    private String boardThumbnail;
 }
