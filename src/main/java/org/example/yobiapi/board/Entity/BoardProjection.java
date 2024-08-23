@@ -14,4 +14,5 @@ public interface BoardProjection {
     Integer getViews();
     String getCategory();
     Integer getReportCount();
+    String getBoardThumbnail();
 }

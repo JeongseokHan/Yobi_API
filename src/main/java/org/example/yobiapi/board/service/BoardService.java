@@ -77,7 +77,7 @@ public class BoardService {
                     updatedBoard.setContent(updateBoardDTO.getContent());
                     updatedBoard.setCategory(updateBoardDTO.getCategory());
                     updatedBoard.setUpdatedDate(LocalDateTime.now());
-                    updatedBoard.setThumbnail(updateBoardDTO.getThumbnail());
+                    updatedBoard.setBoardThumbnail(updateBoardDTO.getBoardThumbnail());
                     boardRepository.save(updatedBoard);
                     return HttpStatus.OK;
                 }

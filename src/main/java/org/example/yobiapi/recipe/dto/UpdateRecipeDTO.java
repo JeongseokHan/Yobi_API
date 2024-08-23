@@ -12,4 +12,5 @@ public class UpdateRecipeDTO {
     private String title;
     private String category;
     private String ingredient;
+    private String recipeThumbnail;
 }
