@@ -11,5 +11,5 @@ public class RecipeCommentsDTO {
     private Integer recipeId;
     private String userId;
     private String content;
-    private Integer contentId;
+    private Integer parentCommentId;
 }
