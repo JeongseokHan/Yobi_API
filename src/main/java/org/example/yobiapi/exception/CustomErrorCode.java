@@ -27,7 +27,9 @@ public enum CustomErrorCode {
     Content_Is_Empty(HttpStatus.BAD_REQUEST, "ACCOUNT-018", "내용을 적어주세요"),
     Board_NOT_FOUND(HttpStatus.NOT_FOUND, "ACCOUNT-019", "게시판이 존재하지 않습니다."),
     Bookmark_NOT_FOUND(HttpStatus.NOT_FOUND, "ACCOUNT-020", "북마크가 존재하지 않습니다."),
-    Discription_LONG_REQUEST(HttpStatus.BAD_REQUEST, "ACCOUNT-021", "설명은 150자 이내로 작성해주세요.");
+    Discription_LONG_REQUEST(HttpStatus.BAD_REQUEST, "ACCOUNT-021", "설명은 150자 이내로 작성해주세요."),
+    CONTENT_LONG_REQUEST(HttpStatus.BAD_REQUEST, "ACCOUNT-022", "내용은 200자 이내로 작성해주세요."),
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "ACCOUNT-023", "댓글을 찾을 수 없습니다.");
 
 
     private final HttpStatus httpStatus;	// HttpStatus
