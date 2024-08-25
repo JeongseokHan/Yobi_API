@@ -36,13 +36,9 @@ public class Comments {
     @JoinColumn(name = "recipe_id", referencedColumnName = "recipe_id")
     private Recipe recipe;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "content_id", referencedColumnName = "content_id")
-    private ContentTypes contentTypes;
 
     @Column(nullable = false, name = "content")
     private String content;
@@ -62,22 +58,32 @@ public class Comments {
     @Column(name = "parent_comment_id")
     private Integer parentCommentId;
 
-    public static Comments RecipeComments(RecipeCommentsDTO recipeCommentsDTO) {
+    public static Comments recipeComments(RecipeCommentsDTO recipeCommentsDTO, Recipe recipe, User user) {
         Comments comments = new Comments();
-        comments.recipe.setRecipeId(recipeCommentsDTO.getRecipeId());
+        comments.setRecipe(recipe);
         comments.setContent(recipeCommentsDTO.getContent());
-        comments.user.setUserId(recipeCommentsDTO.getUserId());
-        comments.contentTypes.setContentId(recipeCommentsDTO.getContentId());
+        comments.setUser(user);
         return comments;
     }
 
-    public static Comments BoardComments(BoardCommentsDTO boardCommentsDTO) {
+    public static Comments boardComments(BoardCommentsDTO boardCommentsDTO, Board board, User user) {
         Comments comments = new Comments();
-        comments.board.setBoardId(boardCommentsDTO.getBoardId());
-        comments.user.setUserId(boardCommentsDTO.getUserId());
+        comments.setBoard(board);
+        comments.setUser(user);
         comments.setContent(boardCommentsDTO.getContent());
-        comments.contentTypes.setContentId(boardCommentsDTO.getContentId());
-
         return comments;
     }
+
+    public static Comments childRecipeComments(RecipeCommentsDTO recipeCommentsDTO, Recipe recipe, User user) {
+        Comments comments = recipeComments(recipeCommentsDTO, recipe, user);
+        comments.setParentCommentId(recipeCommentsDTO.getParentCommentId());
+        return comments;
+    }
+
+    public static Comments childBoardComments(BoardCommentsDTO boardCommentsDTO, Board board, User user) {
+        Comments comments = boardComments(boardCommentsDTO, board, user);
+        comments.setParentCommentId(boardCommentsDTO.getParentCommentId());
+        return comments;
+    }
+
 }
