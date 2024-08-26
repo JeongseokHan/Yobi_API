@@ -38,10 +38,6 @@ public class Report {
     private Recipe recipe;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "content_id", referencedColumnName = "content_id")
-    private ContentTypes contentTypes;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
 
@@ -59,29 +55,28 @@ public class Report {
     @Column(name = "resolved_date")
     private LocalDateTime resolvedDate;
 
-    public static Report BoardReport(BoardReportDTO boardReportDTO) {
+    public static Report BoardReport(Board board, User user, BoardReportDTO boardReportDTO) {
         Report report = new Report();
-        report.board.setBoardId(boardReportDTO.getBoardId());
-        report.user.setUserId(boardReportDTO.getUserId());
+        report.setBoard(board);
+        report.setUser(user);
         report.setReason(boardReportDTO.getReason());
 
         return report;
     }
 
-    public static Report RecipeReport(RecipeReportDTO recipeReportDTO) {
+    public static Report RecipeReport(Recipe recipe, User user, RecipeReportDTO recipeReportDTO) {
         Report report = new Report();
-        report.recipe.setRecipeId(recipeReportDTO.getRecipeId());
-        report.user.setUserId(recipeReportDTO.getUserId());
+        report.setRecipe(recipe);
+        report.setUser(user);
         report.setReason(recipeReportDTO.getReason());
 
         return report;
     }
 
-    public static Report CommentReport(CommentReportDTO commentReportDTO) {
+    public static Report CommentReport(Comments comments, User user, CommentReportDTO commentReportDTO) {
         Report report = new Report();
-        report.comments.setCommentId(commentReportDTO.getCommentId());
-        report.contentTypes.setContentId(commentReportDTO.getContentId());
-        report.user.setUserId(commentReportDTO.getUserId());
+        report.setComments(comments);
+        report.setUser(user);
         report.setReason(commentReportDTO.getReason());
 
         return report;
