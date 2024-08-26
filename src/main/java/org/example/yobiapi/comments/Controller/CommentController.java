@@ -2,9 +2,7 @@ package org.example.yobiapi.comments.Controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.yobiapi.comments.Service.CommentService;
-import org.example.yobiapi.comments.dto.BoardCommentsDTO;
-import org.example.yobiapi.comments.dto.DeleteCommentsDTO;
-import org.example.yobiapi.comments.dto.RecipeCommentsDTO;
+import org.example.yobiapi.comments.dto.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,4 +36,21 @@ public class CommentController {
     public ResponseEntity<?> getBoardComments(@PathVariable("boardId") Integer boardId) {
         return ResponseEntity.status(200).body(commentService.boardCommentList(boardId));
     }
+
+    @GetMapping(value = "/comments/child/{parentCommentId}")
+    public ResponseEntity<?> getChildComments(@PathVariable("parentCommentId") Integer parentCommentId) {
+        return ResponseEntity.status(200).body(commentService.childCommentList(parentCommentId));
+    }
+
+
+
+//    @GetMapping(value = "/comments/recipe/child")
+//    public ResponseEntity<?> getChildRecipeComments(@RequestBody RecipeChildCommentsDTO recipeChildCommentsDTO) {
+//        return ResponseEntity.status(200).body(commentService.recipeChildCommentList(recipeChildCommentsDTO));
+//    }
+//
+//    @GetMapping(value = "/comments/board/child")
+//    public ResponseEntity<?> getChildBoardComments(@RequestBody BoardChildCommentsDTO boardChildCommentsDTO) {
+//        return ResponseEntity.status(200).body(commentService.boardChildCommentList(boardChildCommentsDTO));
+//    }
 }

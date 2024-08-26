@@ -3,17 +3,12 @@ package org.example.yobiapi.comments.Service;
 import lombok.RequiredArgsConstructor;
 import org.example.yobiapi.board.Entity.Board;
 import org.example.yobiapi.board.Entity.BoardRepository;
-import org.example.yobiapi.comments.Entity.Comments;
-import org.example.yobiapi.comments.Entity.CommentsRecipeProjection;
-import org.example.yobiapi.comments.Entity.CommentsRepository;
-import org.example.yobiapi.comments.dto.BoardCommentsDTO;
-import org.example.yobiapi.comments.dto.DeleteCommentsDTO;
-import org.example.yobiapi.comments.dto.RecipeCommentsDTO;
+import org.example.yobiapi.comments.Entity.*;
+import org.example.yobiapi.comments.dto.*;
 import org.example.yobiapi.exception.CustomErrorCode;
 import org.example.yobiapi.exception.CustomException;
 import org.example.yobiapi.recipe.Entity.Recipe;
 import org.example.yobiapi.recipe.Entity.RecipeRepository;
-import org.example.yobiapi.recipe.service.RecipeService;
 import org.example.yobiapi.user.Entity.User;
 import org.example.yobiapi.user.Entity.UserRepository;
 import org.springframework.http.HttpStatus;
@@ -104,22 +99,54 @@ public class CommentService {
         if(recipe == null) {
             throw new CustomException(CustomErrorCode.Recipe_NOT_FOUND);
         }
-        List<CommentsRecipeProjection> comments = commentsRepository.findAllByRecipe(recipe);
+        List<CommentsRecipeProjection> comments = commentsRepository.findAllByRecipeAndCommentIdIsNull(recipe);
         if(comments.isEmpty()) {
             throw new CustomException(CustomErrorCode.COMMENT_NOT_FOUND);
         }
         return comments;
     }
 
-    public List<Comments> boardCommentList(Integer boardId) {
+    public List<CommentsBoardProjection> boardCommentList(Integer boardId) {
         Board board = boardRepository.findByBoardId(boardId);
         if(board == null) {
             throw new CustomException(CustomErrorCode.Board_NOT_FOUND);
         }
-        List<Comments> comments = commentsRepository.findAllByBoard(board);
+        List<CommentsBoardProjection> comments = commentsRepository.findAllByBoardAndCommentIdIsNull(board);
         if(comments.isEmpty()) {
             throw new CustomException(CustomErrorCode.COMMENT_NOT_FOUND);
         }
         return comments;
     }
+
+    public List<CommentsChildProjection> childCommentList(Integer commentId) {
+        List<CommentsChildProjection> comments = commentsRepository.findAllByParentCommentId(commentId);
+        if(comments.isEmpty()) {
+            throw new CustomException(CustomErrorCode.COMMENT_NOT_FOUND);
+        }
+        return comments;
+    }
+
+//    public List<CommentsRecipeProjection> recipeChildCommentList(RecipeChildCommentsDTO recipeChildCommentsDTO) {
+//        Recipe recipe = recipeRepository.findByRecipeId(recipeChildCommentsDTO.getRecipeId());
+//        if(recipe == null) {
+//            throw new CustomException(CustomErrorCode.Recipe_NOT_FOUND);
+//        }
+//        List<CommentsRecipeProjection> comments = commentsRepository.findAllByRecipeAndParentCommentId(recipe, recipeChildCommentsDTO.getCommentId());
+//        if(comments.isEmpty()) {
+//            throw new CustomException(CustomErrorCode.COMMENT_NOT_FOUND);
+//        }
+//        return comments;
+//    }
+//
+//    public List<CommentsBoardProjection> boardChildCommentList(BoardChildCommentsDTO boardChildCommentsDTO) {
+//        Board board = boardRepository.findByBoardId(boardChildCommentsDTO.getBoardId());
+//        if(board == null) {
+//            throw new CustomException(CustomErrorCode.Board_NOT_FOUND);
+//        }
+//        List<CommentsBoardProjection> comments = commentsRepository.findAllByBoardAndParentCommentId(board, boardChildCommentsDTO.getCommentId());
+//        if(comments.isEmpty()) {
+//            throw new CustomException(CustomErrorCode.COMMENT_NOT_FOUND);
+//        }
+//        return comments;
+//    }
 }
