@@ -9,8 +9,7 @@ import org.example.yobiapi.exception.CustomErrorCode;
 import org.example.yobiapi.exception.CustomException;
 import org.example.yobiapi.recipe.Entity.Recipe;
 import org.example.yobiapi.recipe.Entity.RecipeRepository;
-import org.example.yobiapi.report.Entity.Report;
-import org.example.yobiapi.report.Entity.ReportRepository;
+import org.example.yobiapi.report.Entity.*;
 import org.example.yobiapi.report.dto.BoardReportDTO;
 import org.example.yobiapi.report.dto.CommentReportDTO;
 import org.example.yobiapi.report.dto.RecipeReportDTO;
@@ -19,6 +18,9 @@ import org.example.yobiapi.user.Entity.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Service
@@ -88,5 +90,56 @@ public class ReportService {
         Report report = Report.BoardReport(board, user, boardReportDTO);
         reportRepository.save(report);
         return HttpStatus.CREATED;
+    }
+
+    public List<ReportRecipeProjection> searchReportRecipe() {
+        List<ReportRecipeProjection> recipeReportList = reportRepository.findAllByRecipeIsNotNull();
+        if(recipeReportList.isEmpty()) {
+            throw new CustomException(CustomErrorCode.REPORT_NOT_FOUND);
+        }
+        return recipeReportList;
+    }
+    public List<ReportCommentProjection> searchReportComment() {
+        List<ReportCommentProjection> commentReportList = reportRepository.findAllByCommentsIsNotNull();
+        if(commentReportList.isEmpty()) {
+            throw new CustomException(CustomErrorCode.REPORT_NOT_FOUND);
+        }
+        return commentReportList;
+    }
+
+    public List<ReportBoardProjection> searchReportBoard() {
+        List<ReportBoardProjection> boardReportList = reportRepository.findAllByBoardIsNotNull();
+        if(boardReportList.isEmpty()) {
+            throw new CustomException(CustomErrorCode.REPORT_NOT_FOUND);
+        }
+        return boardReportList;
+    }
+
+    public List<ReportAllProjection> searchReportAll() {
+        List<ReportAllProjection> allReportList = reportRepository.findAllBy();
+        if(allReportList.isEmpty()) {
+            throw new CustomException(CustomErrorCode.REPORT_NOT_FOUND);
+        }
+        return allReportList;
+    }
+
+    public HttpStatus deleteReport(Integer reportId) {
+        Report report = reportRepository.findByReportId(reportId);
+        if(report == null) {
+            throw new CustomException(CustomErrorCode.REPORT_NOT_FOUND);
+        }
+        reportRepository.delete(report);
+        return HttpStatus.OK;
+    }
+
+    public HttpStatus resolveReport(Integer reportId) {
+        Report report = reportRepository.findByReportId(reportId);
+        if(report == null) {
+            throw new CustomException(CustomErrorCode.REPORT_NOT_FOUND);
+        }
+        report.setResolved(1);
+        report.setResolvedDate(LocalDateTime.now());
+        reportRepository.save(report);
+        return HttpStatus.OK;
     }
 }
