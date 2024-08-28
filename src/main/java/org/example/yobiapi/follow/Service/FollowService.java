@@ -10,6 +10,9 @@ import org.example.yobiapi.follow.Entity.FollowRepository;
 import org.example.yobiapi.follow.dto.FollowDTO;
 import org.example.yobiapi.user.Entity.User;
 import org.example.yobiapi.user.Entity.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -47,20 +50,22 @@ public class FollowService {
         }
     }
 
-    public List<FollowerProjection> searchFollower(String userId) { // 해당 아이디를 팔로우한 사람들을 검색
+    public Page<FollowerProjection> searchFollower(String userId, int page, int size) { // 해당 아이디를 팔로우한 사람들을 검색
+        Pageable pageable = PageRequest.of(page, size);
         User user = userRepository.findByUserId(userId);
         if (user == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
-        return followRepository.findAllByFollowerId(user);
+        return followRepository.findAllByFollowerId(user, pageable);
     }
 
-    public List<FolloweeProjection> searchFollowee(String userId) {
+    public Page<FolloweeProjection> searchFollowee(String userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
         User user = userRepository.findByUserId(userId);
         if (user == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
-        return followRepository.findAllByFolloweeId(user);
+        return followRepository.findAllByFolloweeId(user, pageable);
     }
 
     public Integer countFollower(String userId) { // 해당 유저를 팔로워한 사람들의 수를 반환
