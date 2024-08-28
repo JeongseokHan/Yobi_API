@@ -17,8 +17,11 @@ public class BookmarkController {
         return ResponseEntity.status(bookmarkService.insertBookmark(recipeBookmarkDTO)).build();
     }
 
-    @GetMapping(value = "/bookmark/user/{userId}")
-    public ResponseEntity<?> getUserBookmark(@PathVariable("userId") String userId) {
-        return ResponseEntity.status(200).body(bookmarkService.searchUserBookmarkRecipe(userId));
+    @GetMapping(value = "/bookmark/user/{userId}/{page}/{size}")
+    public ResponseEntity<?> getUserBookmark(
+            @PathVariable("userId") String userId,
+            @PathVariable("page") int page,
+            @PathVariable("size") int size) {
+        return ResponseEntity.status(200).body(bookmarkService.searchUserBookmarkRecipe(userId, page, size));
     }
 }

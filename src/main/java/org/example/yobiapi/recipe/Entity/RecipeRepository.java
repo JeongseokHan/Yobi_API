@@ -15,7 +15,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     Page<RecipeProjection> findAllByCategoryContaining(String category, Pageable pageable);
     Page<RecipeProjection> findAllByUser(User user, Pageable pageable);
     Page<RecipeProjection> findAllByTitleContaining(String title, Pageable pageable);
-    List<RecipeProjection> findAllByRecipeIdIn(List<Integer> recipeId);
+    Page<RecipeProjection> findAllByRecipeIdIn(List<Integer> recipeId, Pageable pageable);
     Page<RecipeProjection> findAllBy(Pageable pageable);
 
 }

@@ -11,6 +11,9 @@ import org.example.yobiapi.recipe.Entity.RecipeProjection;
 import org.example.yobiapi.recipe.Entity.RecipeRepository;
 import org.example.yobiapi.user.Entity.User;
 import org.example.yobiapi.user.Entity.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -49,7 +52,8 @@ public class BookmarkService {
         }
     }
 
-    public List<RecipeProjection> searchUserBookmarkRecipe(String userId) {
+    public Page<RecipeProjection> searchUserBookmarkRecipe(String userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
         User user = userRepository.findByUserId(userId);
         if(user == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
@@ -63,7 +67,7 @@ public class BookmarkService {
                 List<Integer> recipes = bookmarks.stream()
                         .map(bookmark -> bookmark.getRecipe().getRecipeId())
                         .collect(Collectors.toList());
-                return recipeRepository.findAllByRecipeIdIn(recipes);
+                return recipeRepository.findAllByRecipeIdIn(recipes, pageable);
             }
         }
     }
