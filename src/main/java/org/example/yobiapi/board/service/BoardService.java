@@ -11,6 +11,9 @@ import org.example.yobiapi.exception.CustomErrorCode;
 import org.example.yobiapi.exception.CustomException;
 import org.example.yobiapi.user.Entity.User;
 import org.example.yobiapi.user.Entity.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -102,8 +105,9 @@ public class BoardService {
         }
     }
 
-    public List<BoardProjection> searchBoard_Title(String title) {
-        List<BoardProjection> boards = boardRepository.findAllByTitleContaining(title);
+    public Page<BoardProjection> searchBoard_Title(String title, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<BoardProjection> boards = boardRepository.findAllByTitleContaining(title, pageable);
         if(boards.isEmpty()) {
             throw new CustomException(CustomErrorCode.Board_NOT_FOUND);
         }
@@ -112,8 +116,9 @@ public class BoardService {
         }
     }
 
-    public List<BoardProjection> searchBoard_Category(String category) {
-        List<BoardProjection> boards = boardRepository.findAllByCategoryContaining(category);
+    public Page<BoardProjection> searchBoard_Category(String category, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<BoardProjection> boards = boardRepository.findAllByCategoryContaining(category, pageable);
         if(boards.isEmpty()) {
             throw new CustomException(CustomErrorCode.Board_NOT_FOUND);
         }
@@ -122,13 +127,14 @@ public class BoardService {
         }
     }
 
-    public List<BoardProjection> searchBoard_User(String userId) {
+    public Page<BoardProjection> searchBoard_User(String userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
         User user = userRepository.findByUserId(userId);
         if(user == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
         else {
-            List<BoardProjection> boards = boardRepository.findAllByUser(user);
+            Page<BoardProjection> boards = boardRepository.findAllByUser(user);
             if(boards.isEmpty()) {
                 throw new CustomException(CustomErrorCode.Board_NOT_FOUND);
             }
