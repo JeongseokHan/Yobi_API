@@ -27,19 +27,28 @@ public class CommentController {
         return ResponseEntity.status(commentService.deleteComment(commentId, deleteCommentsDTO)).build();
     }
 
-    @GetMapping(value = "/comments/recipe/{recipeId}")
-    public ResponseEntity<?> getRecipeComments(@PathVariable("recipeId") Integer recipeId) {
-        return ResponseEntity.status(200).body(commentService.recipeCommentList(recipeId));
+    @GetMapping(value = "/comments/recipe/{recipeId}/{page}/{size}")
+    public ResponseEntity<?> getRecipeComments(
+            @PathVariable("recipeId") Integer recipeId,
+            @PathVariable("page") int page,
+            @PathVariable("size") int size) {
+        return ResponseEntity.status(200).body(commentService.recipeCommentList(recipeId, page, size));
     }
 
-    @GetMapping(value = "/comments/board/{boardId}")
-    public ResponseEntity<?> getBoardComments(@PathVariable("boardId") Integer boardId) {
-        return ResponseEntity.status(200).body(commentService.boardCommentList(boardId));
+    @GetMapping(value = "/comments/board/{boardId}/{page}/{size}")
+    public ResponseEntity<?> getBoardComments(
+            @PathVariable("boardId") Integer boardId,
+            @PathVariable("page") int page,
+            @PathVariable("size") int size) {
+        return ResponseEntity.status(200).body(commentService.boardCommentList(boardId, page, size));
     }
 
-    @GetMapping(value = "/comments/child/{parentCommentId}")
-    public ResponseEntity<?> getChildComments(@PathVariable("parentCommentId") Integer parentCommentId) {
-        return ResponseEntity.status(200).body(commentService.childCommentList(parentCommentId));
+    @GetMapping(value = "/comments/child/{parentCommentId}/{page}/{size}")
+    public ResponseEntity<?> getChildComments(
+            @PathVariable("parentCommentId") Integer parentCommentId,
+            @PathVariable("page") int page,
+            @PathVariable("size") int size) {
+        return ResponseEntity.status(200).body(commentService.childCommentList(parentCommentId, page, size));
     }
 
 
