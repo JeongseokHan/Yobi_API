@@ -15,6 +15,9 @@ import org.example.yobiapi.report.dto.CommentReportDTO;
 import org.example.yobiapi.report.dto.RecipeReportDTO;
 import org.example.yobiapi.user.Entity.User;
 import org.example.yobiapi.user.Entity.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -92,31 +95,35 @@ public class ReportService {
         return HttpStatus.CREATED;
     }
 
-    public List<ReportRecipeProjection> searchReportRecipe() {
-        List<ReportRecipeProjection> recipeReportList = reportRepository.findAllByRecipeIsNotNull();
+    public Page<ReportRecipeProjection> searchReportRecipe(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ReportRecipeProjection> recipeReportList = reportRepository.findAllByRecipeIsNotNull(pageable);
         if(recipeReportList.isEmpty()) {
             throw new CustomException(CustomErrorCode.REPORT_NOT_FOUND);
         }
         return recipeReportList;
     }
-    public List<ReportCommentProjection> searchReportComment() {
-        List<ReportCommentProjection> commentReportList = reportRepository.findAllByCommentsIsNotNull();
+    public Page<ReportCommentProjection> searchReportComment(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ReportCommentProjection> commentReportList = reportRepository.findAllByCommentsIsNotNull(pageable);
         if(commentReportList.isEmpty()) {
             throw new CustomException(CustomErrorCode.REPORT_NOT_FOUND);
         }
         return commentReportList;
     }
 
-    public List<ReportBoardProjection> searchReportBoard() {
-        List<ReportBoardProjection> boardReportList = reportRepository.findAllByBoardIsNotNull();
+    public Page<ReportBoardProjection> searchReportBoard(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ReportBoardProjection> boardReportList = reportRepository.findAllByBoardIsNotNull(pageable);
         if(boardReportList.isEmpty()) {
             throw new CustomException(CustomErrorCode.REPORT_NOT_FOUND);
         }
         return boardReportList;
     }
 
-    public List<ReportAllProjection> searchReportAll() {
-        List<ReportAllProjection> allReportList = reportRepository.findAllBy();
+    public Page<ReportAllProjection> searchReportAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ReportAllProjection> allReportList = reportRepository.findAllBy(pageable);
         if(allReportList.isEmpty()) {
             throw new CustomException(CustomErrorCode.REPORT_NOT_FOUND);
         }

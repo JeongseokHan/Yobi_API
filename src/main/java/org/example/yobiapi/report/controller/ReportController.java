@@ -29,24 +29,24 @@ public class ReportController {
         return ResponseEntity.status(reportService.saveCommentReport(commentReportDTO)).build();
     }
 
-    @GetMapping(value = "/report/recipe")
-    public ResponseEntity<?> getRecipeReport() {
-        return ResponseEntity.status(200).body(reportService.searchReportRecipe());
+    @GetMapping(value = "/report/recipe/{page}/{size}")
+    public ResponseEntity<?> getRecipeReport(@PathVariable("page") int page, @PathVariable("size") int size) {
+        return ResponseEntity.status(200).body(reportService.searchReportRecipe(page, size));
     }
 
-    @GetMapping(value = "/report/board")
-    public ResponseEntity<?> getBoardReport() {
-        return ResponseEntity.status(200).body(reportService.searchReportBoard());
+    @GetMapping(value = "/report/board/{page}/{size}")
+    public ResponseEntity<?> getBoardReport(@PathVariable("page") int page, @PathVariable("size") int size) {
+        return ResponseEntity.status(200).body(reportService.searchReportBoard(page, size));
     }
 
-    @GetMapping(value = "/report/comment")
-    public ResponseEntity<?> getCommentReport() {
-        return ResponseEntity.status(200).body(reportService.searchReportComment());
+    @GetMapping(value = "/report/comment/{page}/{size}")
+    public ResponseEntity<?> getCommentReport(@PathVariable("page") int page, @PathVariable("size") int size) {
+        return ResponseEntity.status(200).body(reportService.searchReportComment(page, size));
     }
 
-    @GetMapping(value = "/report/all")
-    public ResponseEntity<?> getAllReport() {
-        return ResponseEntity.status(200).body(reportService.searchReportAll());
+    @GetMapping(value = "/report/all/{page}/{size}")
+    public ResponseEntity<?> getAllReport(@PathVariable("page") int page, @PathVariable("size") int size) {
+        return ResponseEntity.status(200).body(reportService.searchReportAll(page, size));
     }
     @DeleteMapping(value = "/report/{reportId}")
     public ResponseEntity<?> deleteReport(@PathVariable("reportId") Integer reportId) {
