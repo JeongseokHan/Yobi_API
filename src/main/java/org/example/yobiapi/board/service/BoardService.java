@@ -134,7 +134,7 @@ public class BoardService {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
         else {
-            Page<BoardProjection> boards = boardRepository.findAllByUser(user);
+            Page<BoardProjection> boards = boardRepository.findAllByUser(user, pageable);
             if(boards.isEmpty()) {
                 throw new CustomException(CustomErrorCode.Board_NOT_FOUND);
             }
