@@ -6,14 +6,16 @@ import org.example.yobiapi.exception.CustomException;
 import org.example.yobiapi.recipe.Entity.Recipe;
 import org.example.yobiapi.recipe.Entity.RecipeProjection;
 import org.example.yobiapi.recipe.Entity.RecipeRepository;
-import org.example.yobiapi.recipe.dto.DeleteRecipeDTO;
-import org.example.yobiapi.recipe.dto.RecipeDTO;
-import org.example.yobiapi.recipe.dto.UpdateRecipeDTO;
+import org.example.yobiapi.recipe.dto.*;
 import org.example.yobiapi.user.Entity.User;
 import org.example.yobiapi.user.Entity.UserRepository;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -123,12 +125,9 @@ public class RecipeService {
         }
     }
 
-    public List<Recipe> listRecipe() {
-        return recipeRepository.findAll();
-    }
-
-    public List<RecipeProjection> SearchRecipe_Title(String Title) {
-        List<RecipeProjection> recipes = recipeRepository.findAllByTitleContaining(Title);
+    public Page<RecipeProjection> SearchRecipe_Title(String title, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<RecipeProjection> recipes = recipeRepository.findAllByTitleContaining(title, pageable);
         if(recipes.isEmpty()) {
             throw new CustomException(CustomErrorCode.Recipe_NOT_FOUND);
         }
@@ -137,8 +136,9 @@ public class RecipeService {
         }
     }
 
-    public List<RecipeProjection> SearchRecipe_Category(String Category) {
-        List<RecipeProjection> recipes = recipeRepository.findAllByCategoryContaining(Category);
+    public Page<RecipeProjection> SearchRecipe_Category(String category, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<RecipeProjection> recipes = recipeRepository.findAllByCategoryContaining(category, pageable);
         if(recipes.isEmpty()) {
             throw new CustomException(CustomErrorCode.Recipe_NOT_FOUND);
         }
@@ -147,13 +147,14 @@ public class RecipeService {
         }
     }
 
-    public List<RecipeProjection> SearchRecipe_User(String userId) {
+    public Page<RecipeProjection> SearchRecipe_User(String userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
         User user = userRepository.findByUserId(userId);
         if(user == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
         else {
-            List<RecipeProjection> recipes = recipeRepository.findAllByUser(user);
+            Page<RecipeProjection> recipes = recipeRepository.findAllByUser(user, pageable);
             if(recipes.isEmpty()) {
                 throw new CustomException(CustomErrorCode.Recipe_NOT_FOUND);
             }
@@ -161,6 +162,15 @@ public class RecipeService {
                 return recipes;
             }
         }
+    }
+
+    public Page<RecipeProjection> SearchRecipe_All(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<RecipeProjection> recipePage = recipeRepository.findAllBy(pageable);
+        if(recipePage.isEmpty()) {
+            throw new CustomException(CustomErrorCode.Recipe_NOT_FOUND);
+        }
+        return recipePage;
     }
 
     public HttpStatus fetchDataAndPrint() {

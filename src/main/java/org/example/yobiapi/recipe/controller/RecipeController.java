@@ -35,23 +35,36 @@ public class RecipeController {
         return ResponseEntity.status(recipeService.deleteRecipe(recipeId, deleteRecipeDTO)).build();
     }
 
-    @GetMapping(value = "/recipe")
-    public ResponseEntity<?> getRecipe() {
-        return ResponseEntity.status(200).body(recipeService.listRecipe());
+    @GetMapping(value = "/recipe/category/{category}/{page}/{size}")
+    public ResponseEntity<?> getRecipeByCategory(
+            @PathVariable("category") String category,
+            @PathVariable("page") int page,
+            @PathVariable("size") int size) {
+        return ResponseEntity.ok().body(recipeService.SearchRecipe_Category(category, page, size));
     }
 
-    @GetMapping(value = "/recipe/category/{category}")
-    public ResponseEntity<?> getRecipeByCategory(@PathVariable("category") String category) {
-        return ResponseEntity.ok().body(recipeService.SearchRecipe_Category(category));
+    @GetMapping(value = "/recipe/title/{title}/{page}/{size}")
+    public ResponseEntity<?> getRecipeByTitle(
+            @PathVariable("title") String title,
+            @PathVariable("page") int page,
+            @PathVariable("size") int size
+    ) {
+        return ResponseEntity.status(200).body(recipeService.SearchRecipe_Title(title, page, size));
     }
 
-    @GetMapping(value = "/recipe/title/{title}")
-    public ResponseEntity<?> getRecipeByTitle(@PathVariable("title") String title) {
-        return ResponseEntity.status(200).body(recipeService.SearchRecipe_Title(title));
+    @GetMapping(value = "/recipe/user/{userId}/{page}/{size}")
+    public ResponseEntity<?> getRecipeByUser(
+            @PathVariable("userId") String userId,
+            @PathVariable("page") int page,
+            @PathVariable("size") int size
+    ) {
+        return ResponseEntity.status(200).body(recipeService.SearchRecipe_User(userId, page, size));
     }
 
-    @GetMapping(value = "/recipe/user/{user}")
-    public ResponseEntity<?> getRecipeByUser(@PathVariable("user") String user) {
-        return ResponseEntity.status(200).body(recipeService.SearchRecipe_User(user));
+    @GetMapping("/recipe/all/{page}/{size}")
+    public ResponseEntity<?> getRecipeByAll(
+            @PathVariable("page") int page,
+            @PathVariable("size") int size) {
+        return ResponseEntity.status(200).body(recipeService.SearchRecipe_All(page, size));
     }
 }
