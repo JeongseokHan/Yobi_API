@@ -17,14 +17,20 @@ public class FollowController {
         return ResponseEntity.status(followService.saveFollow(followDTO)).build();
     }
 
-    @GetMapping(value = "/follow/0/{userId}") // 해당 유저를 팔로우한 사람들을 검색
-    public ResponseEntity<?> getFollower(@PathVariable("userId") String userId) {
-        return ResponseEntity.status(200).body(followService.searchFollower(userId));
+    @GetMapping(value = "/follow/0/{userId}/{page}/{size}") // 해당 유저를 팔로우한 사람들을 검색
+    public ResponseEntity<?> getFollower(
+            @PathVariable("userId") String userId,
+            @PathVariable("page") int page,
+            @PathVariable("size") int size) {
+        return ResponseEntity.status(200).body(followService.searchFollower(userId, page, size));
     }
 
-    @GetMapping(value = "/follow/1/{userId}")
-    public ResponseEntity<?> getFollowing(@PathVariable("userId") String userId) { // 해당 유저가 팔로잉한 사람들을 검색
-        return ResponseEntity.status(200).body(followService.searchFollowee(userId));
+    @GetMapping(value = "/follow/1/{userId}/{page}/{size}")
+    public ResponseEntity<?> getFollowing(
+            @PathVariable("userId") String userId,
+            @PathVariable("page") int page,
+            @PathVariable("size") int size) { // 해당 유저가 팔로잉한 사람들을 검색
+        return ResponseEntity.status(200).body(followService.searchFollowee(userId, page, size));
     }
 
     @GetMapping(value = "/follow/2/{userId}")
