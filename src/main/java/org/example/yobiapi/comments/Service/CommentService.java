@@ -11,6 +11,9 @@ import org.example.yobiapi.recipe.Entity.Recipe;
 import org.example.yobiapi.recipe.Entity.RecipeRepository;
 import org.example.yobiapi.user.Entity.User;
 import org.example.yobiapi.user.Entity.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -94,32 +97,35 @@ public class CommentService {
         return HttpStatus.OK;
     }
 
-    public List<CommentsRecipeProjection> recipeCommentList(Integer recipeId) {
+    public Page<CommentsRecipeProjection> recipeCommentList(Integer recipeId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
         Recipe recipe = recipeRepository.findByRecipeId(recipeId);
         if(recipe == null) {
             throw new CustomException(CustomErrorCode.Recipe_NOT_FOUND);
         }
-        List<CommentsRecipeProjection> comments = commentsRepository.findAllByRecipeAndCommentIdIsNull(recipe);
+        Page<CommentsRecipeProjection> comments = commentsRepository.findAllByRecipeAndCommentIdIsNull(recipe, pageable);
         if(comments.isEmpty()) {
             throw new CustomException(CustomErrorCode.COMMENT_NOT_FOUND);
         }
         return comments;
     }
 
-    public List<CommentsBoardProjection> boardCommentList(Integer boardId) {
+    public Page<CommentsBoardProjection> boardCommentList(Integer boardId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
         Board board = boardRepository.findByBoardId(boardId);
         if(board == null) {
             throw new CustomException(CustomErrorCode.Board_NOT_FOUND);
         }
-        List<CommentsBoardProjection> comments = commentsRepository.findAllByBoardAndCommentIdIsNull(board);
+        Page<CommentsBoardProjection> comments = commentsRepository.findAllByBoardAndCommentIdIsNull(board, pageable);
         if(comments.isEmpty()) {
             throw new CustomException(CustomErrorCode.COMMENT_NOT_FOUND);
         }
         return comments;
     }
 
-    public List<CommentsChildProjection> childCommentList(Integer commentId) {
-        List<CommentsChildProjection> comments = commentsRepository.findAllByParentCommentId(commentId);
+    public Page<CommentsChildProjection> childCommentList(Integer commentId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<CommentsChildProjection> comments = commentsRepository.findAllByParentCommentId(commentId, pageable);
         if(comments.isEmpty()) {
             throw new CustomException(CustomErrorCode.COMMENT_NOT_FOUND);
         }
