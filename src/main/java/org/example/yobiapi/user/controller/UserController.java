@@ -24,7 +24,7 @@ public class UserController {
         return ResponseEntity.status(userService.UpdateByUserNickName(updateUserNickNameDTO)).build();
     }
 
-    @GetMapping(value = "/user")
+    @PostMapping(value = "/user")
     public ResponseEntity<?> signIn(@RequestBody SignInDTO signInDTO) {
         return ResponseEntity.status(userService.singIn(signInDTO)).build();
     }
