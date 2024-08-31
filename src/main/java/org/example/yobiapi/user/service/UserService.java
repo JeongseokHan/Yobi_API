@@ -18,37 +18,17 @@ public class UserService {
 
     public HttpStatus signUp(UserDTO userDTO) { // 회원가입
         User user = userRepository.findByUserId(userDTO.getUserId());
-        User userNickName = userRepository.findByNickName(userDTO.getNickName());
+        //User userNickName = userRepository.findByNickName(userDTO.getNickName());
         if(user != null) {
             throw new CustomException(CustomErrorCode.ID_ALREADY_EXIST);
         }
+        if(userDTO.getUserId().length() > 15) {
+            throw new CustomException(CustomErrorCode.ID_LONG_REQUEST);
+        }
         else {
-            if(userDTO.getUserId().length() > 15) {
-                throw new CustomException(CustomErrorCode.ID_LONG_REQUEST);
-            }
-            else if(userNickName != null) {
-                throw new CustomException(CustomErrorCode.NICKNAME_ALREADY_EXIST);
-            }
-            else if(userDTO.getPassWord().length() > 15) {
-                throw new CustomException(CustomErrorCode.PW_LONG_REQUEST);
-            }
-            else if(userDTO.getName().length() > 10) {
-                throw new CustomException(CustomErrorCode.NICKNAME_LONG_REQUEST);
-            }
-            else if(userDTO.getUserId().length() < 6) {
-                throw new CustomException(CustomErrorCode.ID_SHORT_REQUEST);
-            }
-            else if(userDTO.getPassWord().length() < 6) {
-                throw new CustomException(CustomErrorCode.PW_SHORT_REQUEST);
-            }
-            else if(userDTO.getName().length() < 2) {
-                throw new CustomException(CustomErrorCode.NICKNAME_SHORT_REQUEST);
-            }
-            else {
                 User newUser = User.toUser(userDTO);
                 userRepository.save(newUser);
                 return HttpStatus.OK;
-            }
         }
     }
 
@@ -57,23 +37,25 @@ public class UserService {
         if(user == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
+        User checkUser = userRepository.findByUserId(updateUserNickNameDTO.getUserId());
+        if(checkUser != null) {
+            throw new CustomException(CustomErrorCode.ID_ALREADY_EXIST);
+        }
+        if(updateUserNickNameDTO.getNickName().length() < 2) {
+            throw new CustomException(CustomErrorCode.NICKNAME_SHORT_REQUEST);
+        }
+        else if(updateUserNickNameDTO.getNickName().length() > 10) {
+            throw new CustomException(CustomErrorCode.NICKNAME_LONG_REQUEST);
+        }
         else {
-            if(updateUserNickNameDTO.getNickName().length() < 2) {
-                throw new CustomException(CustomErrorCode.NICKNAME_SHORT_REQUEST);
-            }
-            else if(updateUserNickNameDTO.getNickName().length() > 10) {
-                throw new CustomException(CustomErrorCode.NICKNAME_LONG_REQUEST);
-            }
-            else {
-                user.setNickName(updateUserNickNameDTO.getNickName());
-                userRepository.save(user);
-                return HttpStatus.OK;
-            }
+            user.setNickName(updateUserNickNameDTO.getNickName());
+            userRepository.save(user);
+            return HttpStatus.OK;
         }
     }
 
     public HttpStatus singIn(SignInDTO signInDTO) { // 로그인
-        User user = userRepository.findByUserIdAndPassWord(signInDTO.getUserId(), signInDTO.getPassWord());
+        User user = userRepository.findByUserIdAndSocialType(signInDTO.getUserId(), signInDTO.getSocialType());
         if(user == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
@@ -83,7 +65,7 @@ public class UserService {
     }
 
     public HttpStatus delete(SignInDTO signInDTO) { // 계정 삭제
-        User user = userRepository.findByUserIdAndPassWord(signInDTO.getUserId(), signInDTO.getPassWord());
+        User user = userRepository.findByUserIdAndSocialType(signInDTO.getUserId(), signInDTO.getSocialType());
         if(user == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }

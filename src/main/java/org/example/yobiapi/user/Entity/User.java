@@ -17,23 +17,26 @@ public class User {
     @Column(nullable = false, name = "user_id")
     private String userId;
 
-    @Column(nullable = false, name = "password")
+    @Column(nullable = false, name = "social_type")
+    private String socialType;
+
+    @Column(name = "password")
     private String passWord;
 
-    @Column(nullable = false, name = "nickname")
+    @Column(name = "nickname")
     private String nickName;
 
-    @Column(nullable = false, name = "name")
+    @Column(name = "name")
     private String name;
 
-    @Column(nullable = false, name = "email")
+    @Column(name = "email")
     private String email;
 
-    @Column(nullable = false, name = "phone_number")
+    @Column(name = "phone_number")
     private String phoneNumber;
 
     @CreationTimestamp
-    @Column(nullable = false, name = "join_date")
+    @Column(name = "join_date")
     private LocalDateTime joinDate;
 
     @ColumnDefault(("0"))
@@ -50,6 +53,7 @@ public class User {
     @Builder
     public static User toUser(UserDTO userDTO) {
         User user = new User();
+        user.setUserId(userDTO.getSocialType());
         user.setUserId(userDTO.getUserId());
         user.setPassWord(userDTO.getPassWord());
         user.setNickName(userDTO.getNickName());
