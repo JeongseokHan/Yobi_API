@@ -54,8 +54,8 @@ public class UserService {
         }
     }
 
-    public HttpStatus singIn(SignInDTO signInDTO) { // 로그인
-        User user = userRepository.findByUserIdAndSocialType(signInDTO.getUserId(), signInDTO.getSocialType());
+    public HttpStatus singIn(String userId, String socialType) { // 로그인
+        User user = userRepository.findByUserIdAndSocialType(userId, socialType);
         if(user == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
@@ -64,8 +64,8 @@ public class UserService {
         }
     }
 
-    public HttpStatus delete(SignInDTO signInDTO) { // 계정 삭제
-        User user = userRepository.findByUserIdAndSocialType(signInDTO.getUserId(), signInDTO.getSocialType());
+    public HttpStatus delete(String userId, String socialType) { // 계정 삭제
+        User user = userRepository.findByUserIdAndSocialType(userId, socialType);
         if(user == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
