@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@ResponseBody
 @RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
@@ -42,5 +41,11 @@ public class BoardController {
     @DeleteMapping(value = "/board/{boardId}")
     public ResponseEntity<?> deleteBoard(@PathVariable("boardId") Integer boardId, @RequestBody DeleteBoardDTO deleteBoardDTO) {
         return ResponseEntity.status(boardService.deleteBoard(boardId, deleteBoardDTO)).build();
+    }
+
+    @GetMapping(value = "/board/{boardId}")
+    public ResponseEntity<?> getBoardById(@PathVariable("boardId") Integer boardId) {
+        BoardDTO boardDTO = boardService.getBoardWithManuals(boardId);
+        return ResponseEntity.ok().body(boardDTO);
     }
 }

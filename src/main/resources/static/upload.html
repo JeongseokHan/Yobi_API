@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>이미지 업로드</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        h1 {
+            color: #007bff;
+            margin-top: 50px;
+        }
+
+        form {
+            margin-top: 20px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: inline-block;
+        }
+
+        input[type="file"] {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .url {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<h1>이미지에 대한 URL을 생성하세요!</h1>
+
+<form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="image" required />
+    <button type="submit">업로드</button>
+</form>
+
+<div id="result" class="url" style="display: none;">
+    <p>이미지 URL: <a id="imageUrl" href="#" target="_blank"></a></p>
+</div>
+
+<script>
+    document.getElementById('uploadForm').onsubmit = function(event) {
+        event.preventDefault();
+        const formData = new FormData(this);
+        fetch('/upload', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.text())
+            .then(url => {
+                document.getElementById('result').style.display = 'block';
+                const link = document.getElementById('imageUrl');
+                link.href = url;
+                link.textContent = url;
+            })
+            .catch(error => console.error('Error uploading image:', error));
+    };
+</script>
+
+</body>
+</html>

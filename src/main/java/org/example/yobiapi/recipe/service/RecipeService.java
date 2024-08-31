@@ -1,6 +1,10 @@
 package org.example.yobiapi.recipe.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.yobiapi.content_manual.Entity.ContentType;
+import org.example.yobiapi.content_manual.Entity.Content_Manual;
+import org.example.yobiapi.content_manual.Entity.Content_ManualRepository;
+import org.example.yobiapi.content_manual.dto.Content_ManualDTO;
 import org.example.yobiapi.exception.CustomErrorCode;
 import org.example.yobiapi.exception.CustomException;
 import org.example.yobiapi.recipe.Entity.Recipe;
@@ -26,6 +30,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +38,7 @@ public class RecipeService {
     String key = "29cf6df4f3f84cbf82be";
     private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
+    private final Content_ManualRepository contentManualRepository;
 
     public Integer saveRecipe(RecipeDTO recipeDTO) {
         User user = userRepository.findByUserId(recipeDTO.getUserId());
@@ -234,6 +240,41 @@ public class RecipeService {
             }
         }
         return rcpPartsDtls.trim();
+    }
+
+    public RecipeDTO getRecipeWithManuals(Integer recipeId) {
+        // 레시피 조회
+        Recipe recipe = recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new CustomException(CustomErrorCode.Recipe_NOT_FOUND));
+
+        // 레시피에 연결된 Content_Manual 조회
+        List<Content_Manual> manuals = contentManualRepository.findByContentTypeAndContentId(ContentType.RECIPE, recipeId);
+
+        // Content_Manual 데이터를 ContentManualDTO로 변환
+        List<Content_ManualDTO> manualDTOs = manuals.stream()
+                .map(manual -> {
+                    Content_ManualDTO manualDTO = new Content_ManualDTO();
+                    manualDTO.setManualId(manual.getManualId());
+                    manualDTO.setStepNumber(manual.getStepNumber());
+                    manualDTO.setDescription(manual.getDescription());
+                    manualDTO.setImage(manual.getImage());
+                    return manualDTO;
+                }).collect(Collectors.toList());
+
+        // Recipe 데이터를 RecipeDTO로 변환
+        RecipeDTO recipeDTO = new RecipeDTO();
+        recipeDTO.setRecipeId(recipe.getRecipeId());
+        recipeDTO.setTitle(recipe.getTitle());
+        recipeDTO.setCategory(recipe.getCategory());
+        recipeDTO.setIngredient(recipe.getIngredient());
+        recipeDTO.setViews(recipe.getViews());
+        recipeDTO.setReportCount(recipe.getReportCount());
+        recipeDTO.setCreateDate(recipe.getCreateDate());
+        recipeDTO.setUpdateDate(recipe.getUpdateDate());
+        recipeDTO.setRecipeThumbnail(recipe.getRecipeThumbnail());
+        recipeDTO.setManuals(manualDTOs);
+
+        return recipeDTO;
     }
 
 }

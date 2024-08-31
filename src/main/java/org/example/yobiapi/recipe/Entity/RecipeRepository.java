@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface RecipeRepository extends JpaRepository<Recipe, Long> {
+public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
     Recipe findByRecipeId(Integer recipeId);
     Page<RecipeProjection> findAllByCategoryContaining(String category, Pageable pageable);
     Page<RecipeProjection> findAllByUser(User user, Pageable pageable);
