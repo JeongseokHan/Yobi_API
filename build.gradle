@@ -32,10 +32,14 @@ dependencies {
     implementation 'javax.persistence:javax.persistence-api:2.2'
     implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
     compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'mysql:mysql-connector-java:8.0.33'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5'
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+    runtimeOnly 'mysql:mysql-connector-java:8.0.35'
+
+//    implementation 'mysql:mysql-connector-java:8.0.35'
+//    runtimeOnly 'mysql:mysql-connector-java:8.0.33'
 }
 
 tasks.named('test') {

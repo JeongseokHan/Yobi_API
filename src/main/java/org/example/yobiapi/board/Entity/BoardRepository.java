@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BoardRepository extends JpaRepository<Board, Long> {
+public interface BoardRepository extends JpaRepository<Board, Integer> {
     Board findByBoardId(Integer boardId);
     Page<BoardProjection> findAllByTitleContaining(String title, Pageable pageable);
     Page<BoardProjection> findAllByCategoryContaining(String category, Pageable pageable);
