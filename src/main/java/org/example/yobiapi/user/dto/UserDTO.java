@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserDTO {
     private String userId;
+    private String socialType;
     private String passWord;
     private String nickName;
     private String name;

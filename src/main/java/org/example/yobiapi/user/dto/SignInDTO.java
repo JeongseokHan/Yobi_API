@@ -9,5 +9,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class SignInDTO {
     private String userId;
-    private String passWord;
+    private String socialType;
 }
