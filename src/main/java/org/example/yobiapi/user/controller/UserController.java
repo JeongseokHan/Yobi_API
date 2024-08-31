@@ -24,14 +24,14 @@ public class UserController {
         return ResponseEntity.status(userService.UpdateByUserNickName(updateUserNickNameDTO)).build();
     }
 
-    @PostMapping(value = "/user/1")
-    public ResponseEntity<?> signIn(@RequestBody SignInDTO signInDTO) {
-        return ResponseEntity.status(userService.singIn(signInDTO)).build();
+    @GetMapping(value = "/user/{userId}/{socialType}")
+    public ResponseEntity<?> signIn(@PathVariable String userId, @PathVariable String socialType) {
+        return ResponseEntity.status(userService.singIn(userId, socialType)).build();
     }
 
-    @DeleteMapping(value = "/user")
-    public ResponseEntity<?> delete(@RequestBody SignInDTO signInDTO) {
-        return ResponseEntity.status(userService.delete(signInDTO)).build();
+    @DeleteMapping(value = "/user/{userId}/{socialType}")
+    public ResponseEntity<?> delete(@PathVariable String userId, @PathVariable String socialType) {
+        return ResponseEntity.status(userService.delete(userId, socialType)).build();
     }
 
 }
