@@ -1,6 +1,7 @@
 package org.example.yobiapi.board.Entity;
 
 import org.example.yobiapi.user.Entity.User;
+import org.example.yobiapi.user.Entity.UserProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Page<BoardProjection> findAllByCategoryContaining(String category, Pageable pageable);
     Page<BoardProjection> findAllByUser(User user, Pageable pageable);
     Page<BoardProjection> findAllByOrderByViewsDesc(Pageable pageable);
+    Integer countAllByUser(User user);
 }

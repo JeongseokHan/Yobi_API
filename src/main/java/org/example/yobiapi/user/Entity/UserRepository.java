@@ -1,5 +1,6 @@
 package org.example.yobiapi.user.Entity;
 
+import org.example.yobiapi.user.dto.ResponseUserProfileDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
