@@ -32,24 +32,18 @@ public class BookmarkService {
         if(user == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
-        else {
-            Recipe recipe = recipeRepository.findByRecipeId(recipeBookmarkDTO.getRecipeId());
-            if(recipe == null) {
-                throw new CustomException(CustomErrorCode.Recipe_NOT_FOUND);
-            }
-            else {
-                Bookmark bookmark = bookmarkRepository.findByUserAndRecipe(user, recipe);
-                if(bookmark == null) {
-                    Bookmark newBookmark = Bookmark.RecipeBookmark(recipe, user);
-                    bookmarkRepository.save(newBookmark);
-                    return HttpStatus.CREATED;
-                }
-                else {
-                    bookmarkRepository.delete(bookmark);
-                    return HttpStatus.OK;
-                }
-            }
+        Recipe recipe = recipeRepository.findByRecipeId(recipeBookmarkDTO.getRecipeId());
+        if(recipe == null) {
+            throw new CustomException(CustomErrorCode.Recipe_NOT_FOUND);
         }
+        Bookmark bookmark = bookmarkRepository.findByUserAndRecipe(user, recipe);
+        if(bookmark == null) {
+            Bookmark newBookmark = Bookmark.RecipeBookmark(recipe, user);
+            bookmarkRepository.save(newBookmark);
+            return HttpStatus.CREATED;
+        }
+            bookmarkRepository.delete(bookmark);
+            return HttpStatus.OK;
     }
 
     public Page<RecipeProjection> searchUserBookmarkRecipe(String userId, int page, int size) {
@@ -58,17 +52,22 @@ public class BookmarkService {
         if(user == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
-        else {
-            List<Bookmark> bookmarks = bookmarkRepository.findAllByUser(user);
-            if(bookmarks.isEmpty()) {
-                throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
-            }
-            else {
-                List<Integer> recipes = bookmarks.stream()
-                        .map(bookmark -> bookmark.getRecipe().getRecipeId())
-                        .collect(Collectors.toList());
-                return recipeRepository.findAllByRecipeIdIn(recipes, pageable);
-            }
+        List<Bookmark> bookmarks = bookmarkRepository.findAllByUser(user);
+        if(bookmarks.isEmpty()) {
+            throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
+        List<Integer> recipes = bookmarks.stream()
+                .map(bookmark -> bookmark.getRecipe().getRecipeId())
+                .collect(Collectors.toList());
+        return recipeRepository.findAllByRecipeIdIn(recipes, pageable);
     }
+
+    public Integer userBookmarkCount(String userId) {
+        User user = userRepository.findByUserId(userId);
+        if(user == null) {
+            throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
+        }
+        return bookmarkRepository.countByUser(user);
+    }
+
 }

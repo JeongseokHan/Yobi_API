@@ -52,4 +52,9 @@ public class BoardController {
     public ResponseEntity<?> deleteBoard(@PathVariable("boardId") Integer boardId, @RequestBody DeleteBoardDTO deleteBoardDTO) {
         return ResponseEntity.status(boardService.deleteBoard(boardId, deleteBoardDTO)).build();
     }
+
+    @GetMapping(value = "/board/view/{page}/{size}")
+    public ResponseEntity<?> getBoardByHighView(@PathVariable("page") int page, @PathVariable("size") int size) {
+        return ResponseEntity.status(200).body(boardService.searchBoard_HighViewList(page, size));
+    }
 }

@@ -18,18 +18,12 @@ public class UserService {
 
     public HttpStatus signUp(UserDTO userDTO) { // 회원가입
         User user = userRepository.findByUserId(userDTO.getUserId());
-        //User userNickName = userRepository.findByNickName(userDTO.getNickName());
         if(user != null) {
             throw new CustomException(CustomErrorCode.ID_ALREADY_EXIST);
         }
-        if(userDTO.getUserId().length() > 15) {
-            throw new CustomException(CustomErrorCode.ID_LONG_REQUEST);
-        }
-        else {
-                User newUser = User.toUser(userDTO);
-                userRepository.save(newUser);
-                return HttpStatus.OK;
-        }
+        User newUser = User.toUser(userDTO);
+        userRepository.save(newUser);
+        return HttpStatus.OK;
     }
 
     public HttpStatus UpdateByUserNickName(UpdateUserNickNameDTO updateUserNickNameDTO) {
@@ -47,11 +41,9 @@ public class UserService {
         else if(updateUserNickNameDTO.getNickName().length() > 10) {
             throw new CustomException(CustomErrorCode.NICKNAME_LONG_REQUEST);
         }
-        else {
-            user.setNickName(updateUserNickNameDTO.getNickName());
-            userRepository.save(user);
-            return HttpStatus.OK;
-        }
+        user.setNickName(updateUserNickNameDTO.getNickName());
+        userRepository.save(user);
+        return HttpStatus.OK;
     }
 
     public HttpStatus singIn(String userId, String socialType) { // 로그인
@@ -59,9 +51,7 @@ public class UserService {
         if(user == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
-        else {
-            return HttpStatus.OK;
-        }
+        return HttpStatus.OK;
     }
 
     public HttpStatus delete(String userId, String socialType) { // 계정 삭제
@@ -69,10 +59,9 @@ public class UserService {
         if(user == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
-        else {
-            userRepository.delete(user);
-            return HttpStatus.OK;
-        }
+        userRepository.delete(user);
+        return HttpStatus.OK;
+
     }
 
 }

@@ -31,25 +31,21 @@ public class BoardService {
         if(user == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
-        else {
-            if(boardDTO.getTitle().length() > 45) {
-                throw new CustomException(CustomErrorCode.Title_LONG_REQUEST);
-            }
-            else if(boardDTO.getContent().isEmpty()) {
-                throw new CustomException(CustomErrorCode.Content_Is_Empty);
-            }
-            else if(boardDTO.getCategory().isEmpty()) {
-                throw new CustomException(CustomErrorCode.CATEGORY_IS_EMPTY);
-            }
-            else if(boardDTO.getCategory().length() > 45) {
-                throw new CustomException(CustomErrorCode.CATEGORY_LONG_REQUEST);
-            }
-            else {
-                Board board = Board.toBoard(boardDTO, user);
-                boardRepository.save(board);
-                return board.getBoardId();
-            }
+        if(boardDTO.getTitle().length() > 45) {
+               throw new CustomException(CustomErrorCode.Title_LONG_REQUEST);
         }
+        else if(boardDTO.getContent().isEmpty()) {
+            throw new CustomException(CustomErrorCode.Content_Is_Empty);
+        }
+        else if(boardDTO.getCategory().isEmpty()) {
+            throw new CustomException(CustomErrorCode.CATEGORY_IS_EMPTY);
+        }
+        else if(boardDTO.getCategory().length() > 45) {
+            throw new CustomException(CustomErrorCode.CATEGORY_LONG_REQUEST);
+        }
+        Board board = Board.toBoard(boardDTO, user);
+        boardRepository.save(board);
+        return board.getBoardId();
     }
 
     public HttpStatus updateBoard(Integer boardId , UpdateBoardDTO updateBoardDTO) {
@@ -58,34 +54,28 @@ public class BoardService {
         if(user == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
-        else {
-            if(updatedBoard == null) {
-                throw new CustomException(CustomErrorCode.Board_NOT_FOUND);
-            }
-            else {
-                if(updateBoardDTO.getTitle().length() > 45) {
-                    throw new CustomException(CustomErrorCode.Title_LONG_REQUEST);
-                }
-                else if(updateBoardDTO.getContent() == null) {
-                    throw new CustomException(CustomErrorCode.Content_Is_Empty);
-                }
-                else if(updateBoardDTO.getCategory().isEmpty()) {
-                    throw new CustomException(CustomErrorCode.CATEGORY_IS_EMPTY);
-                }
-                else if(updateBoardDTO.getCategory().length() > 45) {
-                    throw new CustomException(CustomErrorCode.CATEGORY_LONG_REQUEST);
-                }
-                else {
-                    updatedBoard.setTitle(updateBoardDTO.getTitle());
-                    updatedBoard.setContent(updateBoardDTO.getContent());
-                    updatedBoard.setCategory(updateBoardDTO.getCategory());
-                    updatedBoard.setUpdatedDate(LocalDateTime.now());
-                    updatedBoard.setBoardThumbnail(updateBoardDTO.getBoardThumbnail());
-                    boardRepository.save(updatedBoard);
-                    return HttpStatus.OK;
-                }
-            }
+        if(updatedBoard == null) {
+            throw new CustomException(CustomErrorCode.Board_NOT_FOUND);
         }
+        if(updateBoardDTO.getTitle().length() > 45) {
+            throw new CustomException(CustomErrorCode.Title_LONG_REQUEST);
+        }
+        else if(updateBoardDTO.getContent() == null) {
+            throw new CustomException(CustomErrorCode.Content_Is_Empty);
+        }
+        else if(updateBoardDTO.getCategory().isEmpty()) {
+            throw new CustomException(CustomErrorCode.CATEGORY_IS_EMPTY);
+        }
+        else if(updateBoardDTO.getCategory().length() > 45) {
+            throw new CustomException(CustomErrorCode.CATEGORY_LONG_REQUEST);
+        }
+        updatedBoard.setTitle(updateBoardDTO.getTitle());
+        updatedBoard.setContent(updateBoardDTO.getContent());
+        updatedBoard.setCategory(updateBoardDTO.getCategory());
+        updatedBoard.setUpdatedDate(LocalDateTime.now());
+        updatedBoard.setBoardThumbnail(updateBoardDTO.getBoardThumbnail());
+        boardRepository.save(updatedBoard);
+        return HttpStatus.OK;
     }
 
     public HttpStatus deleteBoard(Integer boardId, DeleteBoardDTO deleteBoardDTO) {
@@ -94,15 +84,11 @@ public class BoardService {
         if(user == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
-        else {
-            if(deletedBoard == null) {
-                throw new CustomException(CustomErrorCode.Board_NOT_FOUND);
-            }
-            else {
-                boardRepository.delete(deletedBoard);
-                return HttpStatus.OK;
-            }
+        if(deletedBoard == null) {
+            throw new CustomException(CustomErrorCode.Board_NOT_FOUND);
         }
+        boardRepository.delete(deletedBoard);
+        return HttpStatus.OK;
     }
 
     public Page<BoardProjection> searchBoard_Title(String title, int page, int size) {
@@ -111,9 +97,7 @@ public class BoardService {
         if(boards.isEmpty()) {
             throw new CustomException(CustomErrorCode.Board_NOT_FOUND);
         }
-        else {
             return boards;
-        }
     }
 
     public Page<BoardProjection> searchBoard_Category(String category, int page, int size) {
@@ -122,9 +106,7 @@ public class BoardService {
         if(boards.isEmpty()) {
             throw new CustomException(CustomErrorCode.Board_NOT_FOUND);
         }
-        else {
             return boards;
-        }
     }
 
     public Page<BoardProjection> searchBoard_User(String userId, int page, int size) {
@@ -133,15 +115,20 @@ public class BoardService {
         if(user == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
-        else {
-            Page<BoardProjection> boards = boardRepository.findAllByUser(user, pageable);
-            if(boards.isEmpty()) {
-                throw new CustomException(CustomErrorCode.Board_NOT_FOUND);
-            }
-            else {
-                return boards;
-            }
+        Page<BoardProjection> boards = boardRepository.findAllByUser(user, pageable);
+        if(boards.isEmpty()) {
+            throw new CustomException(CustomErrorCode.Board_NOT_FOUND);
         }
+        return boards;
+    }
+
+    public Page<BoardProjection> searchBoard_HighViewList(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<BoardProjection> boards = boardRepository.findAllByOrderByViewsDesc(pageable);
+        if(boards.isEmpty()) {
+            throw new CustomException(CustomErrorCode.Board_NOT_FOUND);
+        }
+        return boards;
     }
 
 }

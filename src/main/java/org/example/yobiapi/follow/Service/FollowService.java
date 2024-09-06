@@ -29,25 +29,19 @@ public class FollowService {
         if (followee == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
-        else {
-            User follower = userRepository.findByUserId(followDTO.getFollowerId());
-            if (follower == null) {
-                throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
-            }
-            else {
-                Follow follow = followRepository.findByFolloweeIdAndFollowerId(followee, follower);
-                if(follow == null) {
-                    Follow newFollow = Follow.toFollow(follower, followee);
-                    followRepository.save(newFollow);
-                    return HttpStatus.CREATED;
-                }
-                else {
-                    followRepository.delete(follow);
-                    return HttpStatus.OK;
-                }
-
-            }
+        User follower = userRepository.findByUserId(followDTO.getFollowerId());
+        if (follower == null) {
+            throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
+        Follow follow = followRepository.findByFolloweeIdAndFollowerId(followee, follower);
+        if(follow == null) {
+            Follow newFollow = Follow.toFollow(follower, followee);
+            followRepository.save(newFollow);
+            return HttpStatus.CREATED;
+        }
+        followRepository.delete(follow);
+        return HttpStatus.OK;
+
     }
 
     public Page<FollowerProjection> searchFollower(String userId, int page, int size) { // 해당 아이디를 팔로우한 사람들을 검색
