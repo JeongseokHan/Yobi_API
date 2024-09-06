@@ -1,10 +1,13 @@
 package org.example.yobiapi.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.yobiapi.board.Entity.BoardRepository;
 import org.example.yobiapi.exception.CustomErrorCode;
 import org.example.yobiapi.exception.CustomException;
+import org.example.yobiapi.recipe.Entity.RecipeRepository;
 import org.example.yobiapi.user.Entity.User;
 import org.example.yobiapi.user.Entity.UserRepository;
+import org.example.yobiapi.user.dto.ResponseUserProfileDTO;
 import org.example.yobiapi.user.dto.SignInDTO;
 import org.example.yobiapi.user.dto.UpdateUserNickNameDTO;
 import org.example.yobiapi.user.dto.UserDTO;
@@ -15,6 +18,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final BoardRepository boardRepository;
+    private final RecipeRepository recipeRepository;
 
     public HttpStatus signUp(UserDTO userDTO) { // 회원가입
         User user = userRepository.findByUserId(userDTO.getUserId());
@@ -61,7 +66,23 @@ public class UserService {
         }
         userRepository.delete(user);
         return HttpStatus.OK;
+    }
 
+    public ResponseUserProfileDTO getUserProfile(String userId) {
+        User user = userRepository.findByUserId(userId);
+        if(user == null) {
+            throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
+        }
+        Integer boardCount = boardRepository.countAllByUser(user);
+        Integer recipeCount = recipeRepository.countAllByUser(user);
+        return ResponseUserProfileDTO.builder()
+                .name(user.getName())
+                .userProfile(user.getUserProfile())
+                .followersCount(user.getFollowersCount())
+                .followingCount(user.getFollowingCount())
+                .boardCount(boardCount)
+                .recipeCount(recipeCount)
+                .build();
     }
 
 }

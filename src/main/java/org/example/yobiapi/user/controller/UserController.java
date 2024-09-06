@@ -34,4 +34,9 @@ public class UserController {
         return ResponseEntity.status(userService.delete(userId, socialType)).build();
     }
 
+    @GetMapping(value = "/user/{userId}")
+    public ResponseEntity<?> getUserProfile(@PathVariable String userId) {
+        return ResponseEntity.status(200).body(userService.getUserProfile(userId));
+    }
+
 }
