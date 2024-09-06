@@ -29,24 +29,18 @@ public class LikesService {
         if(user == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
-        else {
-            Recipe recipe = recipeRepository.findByRecipeId(recipeLikesDTO.getRecipeId());
-            if(recipe == null) {
-                throw new CustomException(CustomErrorCode.Recipe_NOT_FOUND);
-            }
-            else {
-                Likes likes = likesRepository.findByUserAndRecipe(user, recipe);
-                if(likes == null) {
-                    Likes newLikes = Likes.toLikesRecipe(user, recipe);
-                    likesRepository.save(newLikes);
-                    return HttpStatus.CREATED;
-                }
-                else {
-                    likesRepository.delete(likes);
-                    return HttpStatus.OK;
-                }
-            }
+        Recipe recipe = recipeRepository.findByRecipeId(recipeLikesDTO.getRecipeId());
+        if(recipe == null) {
+            throw new CustomException(CustomErrorCode.Recipe_NOT_FOUND);
         }
+        Likes likes = likesRepository.findByUserAndRecipe(user, recipe);
+        if(likes == null) {
+            Likes newLikes = Likes.toLikesRecipe(user, recipe);
+            likesRepository.save(newLikes);
+            return HttpStatus.CREATED;
+        }
+        likesRepository.delete(likes);
+        return HttpStatus.OK;
     }
 
     public Integer recipeLikeCount(Integer recipeId) {
@@ -54,9 +48,7 @@ public class LikesService {
         if(recipe == null) {
             throw new CustomException(CustomErrorCode.Recipe_NOT_FOUND);
         }
-        else {
-            return likesRepository.countAllByRecipe(recipe);
-        }
+        return likesRepository.countAllByRecipe(recipe);
     }
 
     public HttpStatus boardLike(BoardLikesDTO boardLikesDTO) {
@@ -64,24 +56,22 @@ public class LikesService {
         if(user == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
-        else {
-            Board board = boardRepository.findByBoardId(boardLikesDTO.getBoardId());
-            if(board == null) {
-                throw new CustomException(CustomErrorCode.Board_NOT_FOUND);
-            }
-            else {
-                Likes likes = likesRepository.findByUserAndBoard(user, board);
-                if(likes == null) {
-                    Likes newLikes = Likes.toLikesBoard(user, board);
-                    likesRepository.save(newLikes);
-                    return HttpStatus.CREATED;
-                }
-                else {
-                    likesRepository.delete(likes);
-                    return HttpStatus.OK;
-                }
-            }
+        Board board = boardRepository.findByBoardId(boardLikesDTO.getBoardId());
+        if(board == null) {
+            throw new CustomException(CustomErrorCode.Board_NOT_FOUND);
         }
+        Likes likes = likesRepository.findByUserAndBoard(user, board);
+        if(likes == null) {
+            Likes newLikes = Likes.toLikesBoard(user, board);
+            likesRepository.save(newLikes);
+            return HttpStatus.CREATED;
+        }
+        else {
+            likesRepository.delete(likes);
+            return HttpStatus.OK;
+        }
+
+
     }
 
     public Integer boardLikeCount(Integer boardId) {
@@ -89,8 +79,6 @@ public class LikesService {
         if(board == null) {
             throw new CustomException(CustomErrorCode.Board_NOT_FOUND);
         }
-        else {
-            return likesRepository.countAllByBoard(board);
-        }
+        return likesRepository.countAllByBoard(board);
     }
 }

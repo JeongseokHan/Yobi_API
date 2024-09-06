@@ -39,31 +39,28 @@ public class RecipeService {
         if(user == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
-        else {
-            if(recipeDTO.getCategory().length() > 45) {
-                throw new CustomException(CustomErrorCode.CATEGORY_LONG_REQUEST);
-            }
-            else if(recipeDTO.getCategory().isEmpty()) {
-                throw new CustomException(CustomErrorCode.CATEGORY_IS_EMPTY);
-            }
-            else if(recipeDTO.getTitle().length() > 45) {
-                throw new CustomException(CustomErrorCode.Title_LONG_REQUEST);
-            }
-            else if(recipeDTO.getTitle().isEmpty()) {
-                throw new CustomException(CustomErrorCode.Title_IS_EMPTY);
-            }
-            else if(recipeDTO.getIngredient().length() > 300) {
-                throw new CustomException(CustomErrorCode.INGREDIENT_LONG_REQUEST);
-            }
-            else if(recipeDTO.getIngredient().isEmpty()) {
-                throw new CustomException(CustomErrorCode.INGREDIENT_IS_EMPTY);
-            }
-            else {
-                Recipe recipe = Recipe.toRecipe(recipeDTO, user);
-                recipeRepository.save(recipe);
-                return recipe.getRecipeId();
-            }
+        if(recipeDTO.getCategory().length() > 45) {
+            throw new CustomException(CustomErrorCode.CATEGORY_LONG_REQUEST);
         }
+        if(recipeDTO.getCategory().isEmpty()) {
+            throw new CustomException(CustomErrorCode.CATEGORY_IS_EMPTY);
+        }
+        if(recipeDTO.getTitle().length() > 45) {
+            throw new CustomException(CustomErrorCode.Title_LONG_REQUEST);
+        }
+        if(recipeDTO.getTitle().isEmpty()) {
+            throw new CustomException(CustomErrorCode.Title_IS_EMPTY);
+        }
+        if(recipeDTO.getIngredient().length() > 300) {
+            throw new CustomException(CustomErrorCode.INGREDIENT_LONG_REQUEST);
+        }
+        if(recipeDTO.getIngredient().isEmpty()) {
+            throw new CustomException(CustomErrorCode.INGREDIENT_IS_EMPTY);
+        }
+        Recipe recipe = Recipe.toRecipe(recipeDTO, user);
+        recipeRepository.save(recipe);
+        return recipe.getRecipeId();
+
     }
 
     public HttpStatus updateRecipe(Integer recipeId,UpdateRecipeDTO updateRecipeDTO) {
@@ -72,57 +69,49 @@ public class RecipeService {
         if(updatedRecipe == null) {
             throw new CustomException(CustomErrorCode.Recipe_NOT_FOUND);
         }
-        else {
-            if(user == null) {
-                throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
-            }
-            else {
-                if(!Objects.equals(updatedRecipe.getUser().getUserId(), updateRecipeDTO.getUserId())) {
-                    throw new CustomException(CustomErrorCode.AUTHOR_NOT_EQUAL);
-                }
-                else if(updateRecipeDTO.getCategory().length() > 45) {
-                    throw new CustomException(CustomErrorCode.CATEGORY_LONG_REQUEST);
-                }
-                else if(updateRecipeDTO.getCategory().isEmpty()) {
-                    throw new CustomException(CustomErrorCode.CATEGORY_IS_EMPTY);
-                }
-                else if(updateRecipeDTO.getTitle().length() > 45) {
-                    throw new CustomException(CustomErrorCode.Title_LONG_REQUEST);
-                }
-                else if(updateRecipeDTO.getTitle().isEmpty()) {
-                    throw new CustomException(CustomErrorCode.Title_IS_EMPTY);
-                }
-                else if(updateRecipeDTO.getIngredient().length() > 300) {
-                    throw new CustomException(CustomErrorCode.INGREDIENT_LONG_REQUEST);
-                }
-                else if(updatedRecipe.getIngredient().isEmpty()) {
-                    throw new CustomException(CustomErrorCode.INGREDIENT_IS_EMPTY);
-                }
-                else {
-                    updatedRecipe.setCategory(updateRecipeDTO.getCategory());
-                    updatedRecipe.setTitle(updateRecipeDTO.getTitle());
-                    updatedRecipe.setIngredient(updateRecipeDTO.getIngredient());
-                    updatedRecipe.setUpdateDate(LocalDateTime.now());
-                    updatedRecipe.setRecipeThumbnail(updateRecipeDTO.getRecipeThumbnail());
-                    recipeRepository.save(updatedRecipe);
-                    return HttpStatus.OK;
-                }
-            }
+        if(user == null) {
+            throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
+        if(!Objects.equals(updatedRecipe.getUser().getUserId(), updateRecipeDTO.getUserId())) {
+            throw new CustomException(CustomErrorCode.AUTHOR_NOT_EQUAL);
+        }
+        if(updateRecipeDTO.getCategory().length() > 45) {
+            throw new CustomException(CustomErrorCode.CATEGORY_LONG_REQUEST);
+        }
+        if(updateRecipeDTO.getCategory().isEmpty()) {
+            throw new CustomException(CustomErrorCode.CATEGORY_IS_EMPTY);
+        }
+        if(updateRecipeDTO.getTitle().length() > 45) {
+            throw new CustomException(CustomErrorCode.Title_LONG_REQUEST);
+        }
+        if(updateRecipeDTO.getTitle().isEmpty()) {
+            throw new CustomException(CustomErrorCode.Title_IS_EMPTY);
+        }
+        if(updateRecipeDTO.getIngredient().length() > 300) {
+            throw new CustomException(CustomErrorCode.INGREDIENT_LONG_REQUEST);
+        }
+        if(updatedRecipe.getIngredient().isEmpty()) {
+            throw new CustomException(CustomErrorCode.INGREDIENT_IS_EMPTY);
+        }
+        updatedRecipe.setCategory(updateRecipeDTO.getCategory());
+        updatedRecipe.setTitle(updateRecipeDTO.getTitle());
+        updatedRecipe.setIngredient(updateRecipeDTO.getIngredient());
+        updatedRecipe.setUpdateDate(LocalDateTime.now());
+        updatedRecipe.setRecipeThumbnail(updateRecipeDTO.getRecipeThumbnail());
+        recipeRepository.save(updatedRecipe);
+        return HttpStatus.OK;
     }
 
     public HttpStatus deleteRecipe(Integer recipeId, DeleteRecipeDTO deleteRecipeDTO) {
         Recipe recipe = recipeRepository.findByRecipeId(recipeId);
         if (recipe == null) {
             throw new CustomException(CustomErrorCode.Recipe_NOT_FOUND);
-        } else {
-            if (!Objects.equals(recipe.getUser().getUserId(), deleteRecipeDTO.getUserId())) {
-                throw new CustomException(CustomErrorCode.AUTHOR_NOT_EQUAL);
-            } else {
-                recipeRepository.delete(recipe);
-                return HttpStatus.OK;
-            }
         }
+        if (!Objects.equals(recipe.getUser().getUserId(), deleteRecipeDTO.getUserId())) {
+            throw new CustomException(CustomErrorCode.AUTHOR_NOT_EQUAL);
+        }
+        recipeRepository.delete(recipe);
+        return HttpStatus.OK;
     }
 
     public Page<RecipeProjection> SearchRecipe_Title(String title, int page, int size) {
@@ -131,9 +120,8 @@ public class RecipeService {
         if(recipes.isEmpty()) {
             throw new CustomException(CustomErrorCode.Recipe_NOT_FOUND);
         }
-        else {
-            return recipes;
-        }
+        return recipes;
+
     }
 
     public Page<RecipeProjection> SearchRecipe_Category(String category, int page, int size) {
@@ -142,9 +130,7 @@ public class RecipeService {
         if(recipes.isEmpty()) {
             throw new CustomException(CustomErrorCode.Recipe_NOT_FOUND);
         }
-        else {
-            return recipes;
-        }
+        return recipes;
     }
 
     public Page<RecipeProjection> SearchRecipe_User(String userId, int page, int size) {
@@ -153,15 +139,11 @@ public class RecipeService {
         if(user == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
-        else {
-            Page<RecipeProjection> recipes = recipeRepository.findAllByUser(user, pageable);
-            if(recipes.isEmpty()) {
-                throw new CustomException(CustomErrorCode.Recipe_NOT_FOUND);
-            }
-            else {
-                return recipes;
-            }
+        Page<RecipeProjection> recipes = recipeRepository.findAllByUser(user, pageable);
+        if(recipes.isEmpty()) {
+            throw new CustomException(CustomErrorCode.Recipe_NOT_FOUND);
         }
+        return recipes;
     }
 
     public Page<RecipeProjection> SearchRecipe_All(int page, int size) {

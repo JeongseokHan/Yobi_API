@@ -53,7 +53,7 @@ public class User {
     @Builder
     public static User toUser(UserDTO userDTO) {
         User user = new User();
-        user.setUserId(userDTO.getSocialType());
+        user.setSocialType(userDTO.getSocialType());
         user.setUserId(userDTO.getUserId());
         user.setPassWord(userDTO.getPassWord());
         user.setNickName(userDTO.getNickName());

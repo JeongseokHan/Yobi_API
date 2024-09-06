@@ -47,11 +47,9 @@ public class CommentService {
             commentsRepository.save(comments);
             return HttpStatus.CREATED;
         }
-        else {
-            Comments comments = Comments.childRecipeComments(recipeCommentsDTO, recipe, user);
-            commentsRepository.save(comments);
-            return HttpStatus.CREATED;
-        }
+        Comments comments = Comments.childRecipeComments(recipeCommentsDTO, recipe, user);
+        commentsRepository.save(comments);
+        return HttpStatus.CREATED;
     }
 
     public HttpStatus saveBoardComment(BoardCommentsDTO boardCommentsDTO) {
@@ -74,11 +72,9 @@ public class CommentService {
             commentsRepository.save(comments);
             return HttpStatus.CREATED;
         }
-        else {
-            Comments comments = Comments.childBoardComments(boardCommentsDTO, board, user);
-            commentsRepository.save(comments);
-            return HttpStatus.CREATED;
-        }
+        Comments comments = Comments.childBoardComments(boardCommentsDTO, board, user);
+        commentsRepository.save(comments);
+        return HttpStatus.CREATED;
     }
 
     public HttpStatus deleteComment(Integer commentId, DeleteCommentsDTO deleteCommentsDTO) {
