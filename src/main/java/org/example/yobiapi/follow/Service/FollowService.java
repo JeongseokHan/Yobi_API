@@ -33,6 +33,9 @@ public class FollowService {
         if (follower == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
+        if(followee == follower) {
+            throw new CustomException(CustomErrorCode.FOLLOW_BAD_REQUEST);
+        }
         Follow follow = followRepository.findByFolloweeIdAndFollowerId(followee, follower);
         if(follow == null) {
             Follow newFollow = Follow.toFollow(follower, followee);
