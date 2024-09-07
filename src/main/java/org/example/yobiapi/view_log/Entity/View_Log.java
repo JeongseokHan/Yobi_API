@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.yobiapi.board.Entity.Board;
 import org.example.yobiapi.recipe.Entity.Recipe;
 import org.example.yobiapi.user.Entity.User;
 import org.example.yobiapi.view_log.dto.View_LogDTO;
@@ -31,6 +32,10 @@ public class View_Log {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "recipe_id", referencedColumnName = "recipe_id")
     private Recipe recipe;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id", referencedColumnName = "board_id")
+    private Board board;
 
     @CreationTimestamp
     @Column(name = "view_date")

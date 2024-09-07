@@ -43,9 +43,11 @@ public class BoardController {
         return ResponseEntity.status(boardService.deleteBoard(boardId, deleteBoardDTO)).build();
     }
 
-    @GetMapping(value = "/board/{boardId}")
-    public ResponseEntity<?> getBoardById(@PathVariable("boardId") Integer boardId) {
-        BoardDTO boardDTO = boardService.getBoardWithManuals(boardId);
+    @GetMapping(value = "/board/{boardId}/{userId}")
+    public ResponseEntity<?> getBoardById(
+            @PathVariable("boardId") Integer boardId,
+            @PathVariable("userId") String userId) {
+        BoardDTO boardDTO = boardService.getBoardWithManuals(boardId, userId);
         return ResponseEntity.ok().body(boardDTO);
     }
 }

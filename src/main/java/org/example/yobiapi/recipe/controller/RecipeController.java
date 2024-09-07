@@ -67,9 +67,11 @@ public class RecipeController {
         return ResponseEntity.status(200).body(recipeService.SearchRecipe_All(page, size));
     }
 
-    @GetMapping(value = "/recipe/{recipeId}")
-    public ResponseEntity<?> getRecipeById(@PathVariable("recipeId") Integer recipeId) {
-        RecipeDTO recipeDTO = recipeService.getRecipeWithManuals(recipeId);
+    @GetMapping(value = "/recipe/{recipeId}/{userId}")
+    public ResponseEntity<?> getRecipeById(
+            @PathVariable("recipeId") Integer recipeId,
+            @PathVariable("userId") String userId) {
+        RecipeDTO recipeDTO = recipeService.getRecipeWithManuals(recipeId, userId);
         return ResponseEntity.ok().body(recipeDTO);
     }
 }

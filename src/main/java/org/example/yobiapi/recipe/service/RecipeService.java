@@ -13,6 +13,8 @@ import org.example.yobiapi.recipe.Entity.RecipeRepository;
 import org.example.yobiapi.recipe.dto.*;
 import org.example.yobiapi.user.Entity.User;
 import org.example.yobiapi.user.Entity.UserRepository;
+import org.example.yobiapi.view_log.Entity.View_Log;
+import org.example.yobiapi.view_log.Entity.View_LogRepository;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -39,6 +41,7 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
     private final Content_ManualRepository contentManualRepository;
+    private final View_LogRepository viewLogRepository;
 
     public Integer saveRecipe(RecipeDTO recipeDTO) {
         User user = userRepository.findByUserId(recipeDTO.getUserId());
@@ -242,13 +245,32 @@ public class RecipeService {
         return rcpPartsDtls.trim();
     }
 
-    public RecipeDTO getRecipeWithManuals(Integer recipeId) {
+    public RecipeDTO getRecipeWithManuals(Integer recipeId, String userId){
         // 레시피 조회
         Recipe recipe = recipeRepository.findById(recipeId)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.Recipe_NOT_FOUND));
 
         // 레시피에 연결된 Content_Manual 조회
         List<Content_Manual> manuals = contentManualRepository.findByContentTypeAndContentId(ContentType.RECIPE, recipeId);
+
+        // 사용자 조회
+        User user = userRepository.findByUserId(userId);
+        if (user == null) {
+            throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
+        }
+
+        // 해당 레시피에 대한 사용자의 조회 기록이 있는지 확인
+        boolean viewed = viewLogRepository.findByUserAndRecipe(user, recipe).isPresent();
+
+        if(!viewed){
+            recipe.setViews(recipe.getViews() + 1);
+            recipeRepository.save(recipe);
+
+            View_Log viewlog = new View_Log();
+            viewlog.setUser(user);
+            viewlog.setRecipe(recipe);
+            viewLogRepository.save(viewlog);
+        }
 
         // Content_Manual 데이터를 ContentManualDTO로 변환
         List<Content_ManualDTO> manualDTOs = manuals.stream()

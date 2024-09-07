@@ -37,6 +37,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5'
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
     runtimeOnly 'mysql:mysql-connector-java:8.0.34'
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
 
 //    implementation 'mysql:mysql-connector-java:8.0.35'
 //    runtimeOnly 'mysql:mysql-connector-java:8.0.33'

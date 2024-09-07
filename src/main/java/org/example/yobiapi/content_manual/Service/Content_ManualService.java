@@ -12,6 +12,7 @@ import org.example.yobiapi.content_manual.dto.Content_ManualDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
@@ -48,8 +49,15 @@ public class Content_ManualService {
         String fileName = folderName + "/" + UUID.randomUUID() + "_" + file.getOriginalFilename();
 
         try {
-            s3Client.putObject(new PutObjectRequest(bucketName, fileName, file.getInputStream(), null)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
+            File tempFile = File.createTempFile("temp", null);  // 임시 파일 생성
+            file.transferTo(tempFile);  // MultipartFile을 임시 파일로 변환
+
+            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, fileName, tempFile);
+            putObjectRequest.withCannedAcl(CannedAccessControlList.PublicRead);
+
+            s3Client.putObject(putObjectRequest);
+            tempFile.delete();  // 업로드 후 임시 파일 삭제
+
         } catch (IOException e) {
             throw new RuntimeException("s3 업로드 실패");
         }

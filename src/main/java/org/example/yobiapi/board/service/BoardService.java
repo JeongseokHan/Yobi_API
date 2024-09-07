@@ -15,6 +15,8 @@ import org.example.yobiapi.exception.CustomErrorCode;
 import org.example.yobiapi.exception.CustomException;
 import org.example.yobiapi.user.Entity.User;
 import org.example.yobiapi.user.Entity.UserRepository;
+import org.example.yobiapi.view_log.Entity.View_Log;
+import org.example.yobiapi.view_log.Entity.View_LogRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,7 @@ public class BoardService {
     private final UserRepository userRepository;
     private final BoardRepository boardRepository;
     private final Content_ManualRepository contentManualRepository;
+    private final View_LogRepository viewLogRepository;
 
     public Integer saveBoard(BoardDTO boardDTO) {
         User user = userRepository.findByUserId(boardDTO.getUserId());
@@ -144,13 +147,32 @@ public class BoardService {
         }
     }
 
-    public BoardDTO getBoardWithManuals(Integer boardId) {
+    public BoardDTO getBoardWithManuals(Integer boardId, String userId) {
         // 게시판 조회
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.Board_NOT_FOUND));
 
         // 게시판에 연결된 Content_Manual 조회
         List<Content_Manual> manuals = contentManualRepository.findByContentTypeAndContentId(ContentType.BOARD, boardId);
+
+        // 사용자 조회
+        User user = userRepository.findByUserId(userId);
+        if (user == null) {
+            throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
+        }
+
+        // 해당 레시피에 대한 사용자의 조회 기록이 있는지 확인
+        boolean viewed = viewLogRepository.findByUserAndBoard(user, board).isPresent();
+
+        if(!viewed){
+            board.setViews(board.getViews() + 1);
+            boardRepository.save(board);
+
+            View_Log viewlog = new View_Log();
+            viewlog.setUser(user);
+            viewlog.setBoard(board);
+            viewLogRepository.save(viewlog);
+        }
 
         // Content_Manual 데이터를 ContentManualDTO로 변환
         List<Content_ManualDTO> manualDTOs = manuals.stream()
