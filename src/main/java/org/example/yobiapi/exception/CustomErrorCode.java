@@ -32,7 +32,8 @@ public enum CustomErrorCode {
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "ACCOUNT-023", "댓글을 찾을 수 없습니다."),
     REPORT_NOT_FOUND(HttpStatus.NOT_FOUND, "ACCOUNT-024", "신고 내용을 찾을 수 없습니다."),
     REASON_IS_EMPTY(HttpStatus.BAD_REQUEST, "ACCOUNT-025", "신고 사유를 적어주세요."),
-    REASON_LONG_REQUEST(HttpStatus.BAD_REQUEST, "ACCOUNT-026", "신고 사유는 150자 이내로 작성해주세요.");
+    REASON_LONG_REQUEST(HttpStatus.BAD_REQUEST, "ACCOUNT-026", "신고 사유는 150자 이내로 작성해주세요."),
+    FOLLOW_BAD_REQUEST(HttpStatus.BAD_REQUEST, "ACCOUNT-027", "자신을 팔로우 하는 것은 불가능합니다.");
 
 
     private final HttpStatus httpStatus;	// HttpStatus
