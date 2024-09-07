@@ -79,14 +79,12 @@ public class UserService {
         }
         Integer boardCount = boardRepository.countAllByUser(user);
         Integer recipeCount = recipeRepository.countAllByUser(user);
-        Integer followersCount = followService.countFollower(userId);
-        Integer followingCount = followService.countFollowee(userId);
 
         return ResponseUserProfileDTO.builder()
                 .name(user.getName())
                 .userProfile(user.getUserProfile())
-                .followersCount(followersCount)
-                .followingCount(followingCount)
+                .followersCount(user.getFollowersCount())
+                .followingCount(user.getFollowingCount())
                 .boardCount(boardCount)
                 .recipeCount(recipeCount)
                 .build();

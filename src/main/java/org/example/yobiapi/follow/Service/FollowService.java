@@ -25,22 +25,34 @@ public class FollowService {
     private final UserRepository userRepository;
 
     public HttpStatus saveFollow(FollowDTO followDTO) {
-        User followee = userRepository.findByUserId(followDTO.getFolloweeId());
+        User followee = userRepository.findByUserId(followDTO.getFolloweeId()); // 팔로우 하는 사람
         if (followee == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
-        User follower = userRepository.findByUserId(followDTO.getFollowerId());
+        User follower = userRepository.findByUserId(followDTO.getFollowerId()); // 팔로우를 받는 사람
         if (follower == null) {
             throw new CustomException(CustomErrorCode.USER_NOT_FOUND);
         }
         Follow follow = followRepository.findByFolloweeIdAndFollowerId(followee, follower);
         if(follow == null) {
             Follow newFollow = Follow.toFollow(follower, followee);
+            if(follower.getFollowersCount() == null) follower.setFollowersCount(0);
+            if(followee.getFollowingCount() == null) followee.setFollowingCount(0);
+            follower.setFollowersCount(follower.getFollowersCount() + 1);
+            followee.setFollowingCount(followee.getFollowingCount() + 1);
             followRepository.save(newFollow);
+            userRepository.save(follower);
+            userRepository.save(followee);
             return HttpStatus.CREATED;
         }
-        followRepository.delete(follow);
-        return HttpStatus.OK;
+        else {
+            follower.setFollowersCount(follower.getFollowersCount() - 1);
+            followee.setFollowingCount(followee.getFollowingCount() - 1);
+            followRepository.delete(follow);
+            userRepository.save(follower);
+            userRepository.save(followee);
+            return HttpStatus.OK;
+        }
 
     }
 
