@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.yobiapi.board.Entity.BoardRepository;
 import org.example.yobiapi.exception.CustomErrorCode;
 import org.example.yobiapi.exception.CustomException;
+import org.example.yobiapi.follow.Entity.FollowRepository;
+import org.example.yobiapi.follow.Service.FollowService;
 import org.example.yobiapi.recipe.Entity.RecipeRepository;
 import org.example.yobiapi.user.Entity.User;
 import org.example.yobiapi.user.Entity.UserRepository;
@@ -20,6 +22,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final BoardRepository boardRepository;
     private final RecipeRepository recipeRepository;
+    private final FollowRepository followRepository;
+    private final FollowService followService;
 
     public HttpStatus signUp(UserDTO userDTO) { // 회원가입
         User user = userRepository.findByUserId(userDTO.getUserId());
@@ -75,11 +79,14 @@ public class UserService {
         }
         Integer boardCount = boardRepository.countAllByUser(user);
         Integer recipeCount = recipeRepository.countAllByUser(user);
+        Integer followersCount = followService.countFollower(userId);
+        Integer followingCount = followService.countFollowee(userId);
+
         return ResponseUserProfileDTO.builder()
                 .name(user.getName())
                 .userProfile(user.getUserProfile())
-                .followersCount(user.getFollowersCount())
-                .followingCount(user.getFollowingCount())
+                .followersCount(followersCount)
+                .followingCount(followingCount)
                 .boardCount(boardCount)
                 .recipeCount(recipeCount)
                 .build();
