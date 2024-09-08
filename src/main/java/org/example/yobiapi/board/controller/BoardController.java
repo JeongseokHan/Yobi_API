@@ -57,4 +57,9 @@ public class BoardController {
     public ResponseEntity<?> getBoardByHighView(@PathVariable("page") int page, @PathVariable("size") int size) {
         return ResponseEntity.status(200).body(boardService.searchBoard_HighViewList(page, size));
     }
+
+    @GetMapping(value = "/board/all/{page}/{size}")
+    public ResponseEntity<?> getBoardByAll(@PathVariable("page") int page, @PathVariable("size") int size) {
+        return ResponseEntity.status(200).body(boardService.searchBoard_All(page, size));
+    }
 }
