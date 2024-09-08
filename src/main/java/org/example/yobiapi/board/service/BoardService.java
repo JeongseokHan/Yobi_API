@@ -129,4 +129,13 @@ public class BoardService {
         }
         return boards;
     }
+
+    public Page<BoardProjection> searchBoard_All(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<BoardProjection> boards = boardRepository.findAllBy(pageable);
+        if(boards.isEmpty()) {
+            throw new CustomException(CustomErrorCode.Board_NOT_FOUND);
+        }
+        return boards;
+    }
 }
