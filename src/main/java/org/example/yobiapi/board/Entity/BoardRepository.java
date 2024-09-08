@@ -17,4 +17,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Page<BoardProjection> findAllByUser(User user, Pageable pageable);
     Page<BoardProjection> findAllByOrderByViewsDesc(Pageable pageable);
     Integer countAllByUser(User user);
+    Page<BoardProjection> findAllBy(Pageable pageable);
 }
