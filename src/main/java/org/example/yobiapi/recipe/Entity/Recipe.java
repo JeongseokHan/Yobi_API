@@ -5,12 +5,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.yobiapi.content_manual.Entity.Content_Manual;
 import org.example.yobiapi.recipe.dto.RecipeDTO;
 import org.example.yobiapi.user.Entity.User;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -47,12 +51,15 @@ public class Recipe {
     @Column(name = "create_date")
     private LocalDateTime createDate;
 
-    @CreationTimestamp
+    @UpdateTimestamp
     @Column(name = "update_date")
     private LocalDateTime updateDate;
 
     @Column(name = "recipe_thumbnail")
     private String recipeThumbnail;
+
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Content_Manual> manuals = new ArrayList<>();
 
     public static Recipe toRecipe(RecipeDTO recipeDTO, User user) {
         Recipe recipe = new Recipe();

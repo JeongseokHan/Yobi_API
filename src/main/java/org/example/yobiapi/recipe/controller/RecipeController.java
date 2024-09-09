@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@ResponseBody
 @RequiredArgsConstructor
 public class RecipeController {
     private final RecipeService recipeService;
@@ -66,5 +65,11 @@ public class RecipeController {
             @PathVariable("page") int page,
             @PathVariable("size") int size) {
         return ResponseEntity.status(200).body(recipeService.SearchRecipe_All(page, size));
+    }
+
+    @GetMapping(value = "/recipe/{recipeId}")
+    public ResponseEntity<?> getRecipeById(@PathVariable("recipeId") Integer recipeId) {
+        RecipeDTO recipeDTO = recipeService.getRecipeWithManuals(recipeId);
+        return ResponseEntity.ok().body(recipeDTO);
     }
 }

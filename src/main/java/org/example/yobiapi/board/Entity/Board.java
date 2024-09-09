@@ -3,11 +3,15 @@ package org.example.yobiapi.board.Entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.yobiapi.board.dto.BoardDTO;
+import org.example.yobiapi.content_manual.Entity.Content_Manual;
 import org.example.yobiapi.user.Entity.User;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -35,7 +39,7 @@ public class Board {
     @Column(name = "create_date")
     private LocalDateTime createDate;
 
-    @CreationTimestamp
+    @UpdateTimestamp
     @Column(name = "updated_date")
     private LocalDateTime updatedDate;
 
@@ -52,6 +56,9 @@ public class Board {
 
     @Column(name = "board_thumbnail")
     private String boardThumbnail;
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Content_Manual> manuals = new ArrayList<>();
 
     @Builder
     public static Board toBoard(BoardDTO boardDTO, User user) {
