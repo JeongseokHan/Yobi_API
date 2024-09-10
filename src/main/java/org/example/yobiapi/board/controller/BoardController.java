@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@ResponseBody
 @RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
@@ -61,5 +60,11 @@ public class BoardController {
     @GetMapping(value = "/board/all/{page}/{size}")
     public ResponseEntity<?> getBoardByAll(@PathVariable("page") int page, @PathVariable("size") int size) {
         return ResponseEntity.status(200).body(boardService.searchBoard_All(page, size));
+    }
+
+    @GetMapping(value = "/board/{boardId}")
+    public ResponseEntity<?> getBoardById(@PathVariable("boardId") Integer boardId) {
+        BoardDTO boardDTO = boardService.getBoardWithManuals(boardId);
+        return ResponseEntity.ok().body(boardDTO);
     }
 }
