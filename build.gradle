@@ -28,7 +28,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.2.5'
     implementation 'org.springframework.boot:spring-boot-starter'
-    runtimeOnly 'mysql:mysql-connector-java:8.0.34'  // MySQL 커넥터 선언을 올바르게 수정
+    runtimeOnly 'mysql:mysql-connector-java:8.0.33'
     implementation 'javax.persistence:javax.persistence-api:2.2'
     implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
     compileOnly 'org.projectlombok:lombok'
