@@ -35,7 +35,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class RecipeService {
-    String key = "29cf6df4f3f84cbf82be";
     private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
     private final Content_ManualRepository contentManualRepository;
@@ -196,6 +195,7 @@ public class RecipeService {
                     defRecipe.setIngredient(ingredients);  // 추출된 재료 목록만 설정
                     defRecipe.setRecipeThumbnail(recipe.get("ATT_FILE_NO_MAIN").toString());
                     defRecipe.setCategory("요비");
+                    defRecipe.setRecipeId(Integer.parseInt(recipe.get("RCP_SEQ").toString()));
                     defRecipe.setUser(user);
                     recipeList.add(defRecipe);
                 }
@@ -207,7 +207,7 @@ public class RecipeService {
         return HttpStatus.OK;
     }
 
-    private String extractIngredients(String rcpPartsDtls) {
+    private String extractIngredients(String rcpPartsDtls) { // 재료 부분이 가독성이 안좋게 들어가서 쓴 메소드
         String[] lines = rcpPartsDtls.split("\\r?\\n");
         if (lines.length > 0) {
             String firstLine = lines[0].trim();

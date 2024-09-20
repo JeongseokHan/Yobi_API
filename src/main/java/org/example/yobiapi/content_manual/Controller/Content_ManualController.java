@@ -17,6 +17,11 @@ import java.util.List;
 public class Content_ManualController {
     private final Content_ManualService contentManualService;
 
+    @PostMapping("/manual/def")
+    public ResponseEntity<?> insertDefaultManual() {
+        return ResponseEntity.status(contentManualService.fetchDataAndPrint()).build();
+    }
+
     // 게시글 사진 추가 또는 레시피 사진과 설명 추가
     @PostMapping("/add")
     public ResponseEntity<Content_ManualDTO> addContentManual(
